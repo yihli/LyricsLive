@@ -108,12 +108,12 @@ function App() {
             {
               playing
             }
-            {
+            {/* {
               currentLyrics?.map(lyric => {
                 return currentLineIndex === lyric.index ? <div style={{ border: '1px solid black' }}>{lyric.line}</div> : <div>{lyric.line}</div>
                 }
               )
-            }
+            } */}
           </div>
         </div>
         : <button type="submit" onClick={loginSpotify}>login with spotify</button>

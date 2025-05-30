@@ -5,7 +5,7 @@ import cors from 'cors';
 import { z } from 'zod';
 import 'dotenv/config';
 
-import { parseLyrics } from './utils';
+// import { parseLyrics } from './utils';
 import Encryption from './encryption';
 
 const MONGODB_URI: string = z.string().parse(process.env.MONGODB_URI);
@@ -46,7 +46,7 @@ app.use(express.json());
 
 // Session middleware
 app.use(session({
-    secret: SESSION_KEY, 
+    secret: SESSION_KEY,
     resave: false,             // don't save session if unmodified
     saveUninitialized: false,  // only save sessions if something is stored
     cookie: {
@@ -83,11 +83,25 @@ app.get('/api/login', async (req, res) => {
     }
 });
 
-app.get('/api/currentlyplaying', async (req, res) => {
-    const currentPlayingUrl: string = 'https://api.spotify.com/v1/me/player/currently-playing';
-    const lrcLibSearchUrl = (trackName: string, artistName:string): string => {
+app.post('/api/getlyrics', async (req, res) => {
+    const lrcLibSearchUrl = (trackName: string, artistName: string): string => {
         return `https://lrclib.net/api/search?track_name=${trackName}&artist_name=${artistName}`;
     };
+    const { trackName, artistName } = req.body
+    if (!trackName || !artistName) {
+        throw new Error ('Missing track name or artist name.')
+    }
+
+    const currentSongLyrics = await fetch(lrcLibSearchUrl(trackName, artistName), {
+        method: 'GET'
+    });
+    const currentSongLyricsJson = await currentSongLyrics.json();
+    console.log('current song lyrics:', currentSongLyricsJson[0]);
+    res.send(currentSongLyricsJson);
+});
+
+app.get('/api/currentlyplaying', async (req, res) => {
+    const currentPlayingUrl: string = 'https://api.spotify.com/v1/me/player/currently-playing';
 
     if (!req.session.user) {
         throw new Error('/api/currentlyplaying: Missing session. Is user logged in?')
@@ -103,16 +117,22 @@ app.get('/api/currentlyplaying', async (req, res) => {
 
     try {
         const currentSongJson = await currentSongResponse.json();
+        
         console.log(currentSongJson)
-        const trackName = currentSongJson.item.name;
-        const artistName = currentSongJson.item.album.artists[0].name;
-        const currentSongLyrics = await fetch(lrcLibSearchUrl(trackName, artistName), {
-            method: 'GET'
-        });
 
-        const currentSongLyricsJson = await currentSongLyrics.json();
-        console.log(currentSongLyricsJson[0])
-        res.send({ isPlaying: true, lyrics: parseLyrics(currentSongLyricsJson[0].syncedLyrics),  ...currentSongJson});
+        // REFACTOR INTO THE GETLYRICS ENDPOINT
+        // const trackName = currentSongJson.item.name;
+        // const artistName = currentSongJson.item.album.artists[0].name;
+        // const currentSongLyrics = await fetch(lrcLibSearchUrl(trackName, artistName), {
+        //     method: 'GET'
+        // });
+        // const currentSongLyricsJson = await currentSongLyrics.json();
+        // console.log('current song lyrics:', currentSongLyricsJson[0])
+
+
+        // res.send({ isPlaying: true, lyrics: parseLyrics(currentSongLyricsJson[0].syncedLyrics), ...currentSongJson });
+
+        res.send({ isPlaying: true, ...currentSongJson });
     } catch (e) {
         res.send({ isPlaying: false })
     }
@@ -125,7 +145,7 @@ app.get('/api/me', async (req, res) => {
     if (!accessToken) {
         throw new Error('/api/me: Missing access token. Is user logged in?')
     }
-    
+
     // get user details 
     const userDetailsResponse = await fetch(userDetailsUrl, {
         method: 'GET',
@@ -134,6 +154,7 @@ app.get('/api/me', async (req, res) => {
         }
     });
     const userDetailsJson = await userDetailsResponse.json();
+
     console.log('/api/me called.')
     res.send(userDetailsJson);
 });
