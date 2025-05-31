@@ -40,6 +40,33 @@ interface TranslatedSyncedLyrics extends SyncedLyrics {
     translated: string;
 }
 
+interface SpotifyProfile {
+    country: string;
+    display_name: string;
+    email: string;
+    explicit_content: { 
+        filter_enabled: boolean;
+        filter_locked: boolean;
+    };
+    external_urls: {
+        spotify: string;
+    };
+    followers: { 
+        href: unknown;
+        total: number;
+    };
+    href: string;
+    id: string;
+    images: Array<{ 
+        height: number; 
+        url: string; 
+        width: number; 
+    }>;
+    product: string;
+    type: string;
+    uri: string;
+}
+
 const MONGODB_URI: string = z.string().parse(process.env.MONGODB_URI);
 const CLIENT_ID: string = z.string().parse(process.env.CLIENT_ID);
 const CLIENT_SECRET: string = z.string().parse(process.env.CLIENT_SECRET);
@@ -95,7 +122,7 @@ app.post('/api/logout', (req: Request, res: Response) => {
         req.session.destroy(() => {
             console.log('Session destroyed.')
         })
-        res.status(200).send({ message: 'Successfully logged out'});
+        res.status(200).send({ message: 'Successfully logged out' });
     }
 })
 
@@ -109,7 +136,7 @@ app.get('/api/login', async (req: Request, res: Response) => {
     }
 });
 
-app.post('/api/getlyrics', async (req: Request<any,any, LyricsRequest>, res: Response) => {
+app.post('/api/getlyrics', async (req: Request<any, any, LyricsRequest>, res: Response) => {
     const lrcLibSearchUrl = (trackName: string, artistName: string): string => {
         return `https://lrclib.net/api/search?track_name=${trackName}&artist_name=${artistName}`;
     };
@@ -117,7 +144,7 @@ app.post('/api/getlyrics', async (req: Request<any,any, LyricsRequest>, res: Res
     const trackName = z.string().parse(req.body.trackName);
     const artistName = z.string().parse(req.body.artistName);
     if (!trackName || !artistName) {
-        throw new Error ('Missing track name or artist name.')
+        throw new Error('Missing track name or artist name.')
     }
 
     const currentSongLyrics = await fetch(lrcLibSearchUrl(trackName, artistName), {
@@ -126,8 +153,8 @@ app.post('/api/getlyrics', async (req: Request<any,any, LyricsRequest>, res: Res
     const currentSongLyricsJson: Array<LrcLibResult> = await currentSongLyrics.json();
 
     const translatedLyrics: Array<TranslatedSyncedLyrics> = await getOriginalAndTranslatedLyrics(findSyncedLyrics(currentSongLyricsJson));
-    
-    res.send({translatedLyrics});
+
+    res.send({ translatedLyrics });
 });
 
 app.get('/api/currentlyplaying', async (req: Request, res: Response) => {
@@ -144,9 +171,9 @@ app.get('/api/currentlyplaying', async (req: Request, res: Response) => {
             'Authorization': 'Bearer ' + req.session.user.access_token
         }
     });
-
     try {
-        const currentSongJson = await currentSongResponse.json();
+
+        const currentSongJson = await currentSongResponse.json(); // too many fields; type this another time
         res.send({ isPlaying: true, ...currentSongJson });
     } catch (e) {
         res.send({ isPlaying: false })
@@ -168,7 +195,7 @@ app.get('/api/me', async (req: Request, res: Response) => {
             'Authorization': 'Bearer ' + accessToken
         }
     });
-    const userDetailsJson = await userDetailsResponse.json();
+    const userDetailsJson: SpotifyProfile = await userDetailsResponse.json();
     res.send(userDetailsJson);
 });
 
