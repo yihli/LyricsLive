@@ -7,6 +7,7 @@ import 'dotenv/config';
 
 // import { parseLyrics } from './utils';
 import Encryption from './encryption';
+import { findSyncedLyrics, getOriginalAndTranslatedLyrics } from './utils';
 
 const MONGODB_URI: string = z.string().parse(process.env.MONGODB_URI);
 const CLIENT_ID: string = z.string().parse(process.env.CLIENT_ID);
@@ -87,6 +88,7 @@ app.post('/api/getlyrics', async (req, res) => {
     const lrcLibSearchUrl = (trackName: string, artistName: string): string => {
         return `https://lrclib.net/api/search?track_name=${trackName}&artist_name=${artistName}`;
     };
+
     const { trackName, artistName } = req.body
     if (!trackName || !artistName) {
         throw new Error ('Missing track name or artist name.')
@@ -96,8 +98,9 @@ app.post('/api/getlyrics', async (req, res) => {
         method: 'GET'
     });
     const currentSongLyricsJson = await currentSongLyrics.json();
-    console.log('current song lyrics:', currentSongLyricsJson[0]);
-    res.send(currentSongLyricsJson);
+    // console.log('current song lyrics:', currentSongLyricsJson[0]);
+    const translatedLyrics = await getOriginalAndTranslatedLyrics(findSyncedLyrics(currentSongLyricsJson));
+    res.send({translatedLyrics});
 });
 
 app.get('/api/currentlyplaying', async (req, res) => {

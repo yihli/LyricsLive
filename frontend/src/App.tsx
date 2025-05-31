@@ -19,7 +19,7 @@ function App() {
   const [loggedIn, setLoggedIn] = useState(false);
   const [user, setUser] = useState(null);
   const [progressTime, setProgressTime] = useState(null);
-  const [currentLyrics, setCurrentLyrics] = useState(null);
+  const [currentSong, setCurrentSong] = useState(null);
   const [currentLineIndex, setCurrentLineIndex] = useState(0);
 
   const currentlyPlaying = useQuery({
@@ -29,14 +29,16 @@ function App() {
         const timeOfRequest = Date.now()
         const data = await usersService.getCurrentlyPlaying();
         // Compute time elapsed since the data was fetched
+        console.log('data from query:', data);
+
+        if (currentSong === null || data.item.id !== currentSong.item.id) {
+          const { translatedLyrics } = await lyricsService.getLyrics(data.item.name, data.item.artists[0].name);
+          console.log(translatedLyrics);
+          setCurrentSong({ ...data, lyrics: translatedLyrics });
+        }
         const timeReturned = Date.now();
         const elapsed = timeReturned - timeOfRequest;
-
-        // Estimated current playback position
-        // const estimatedProgress = progress_ms + elapsed;
-
         setProgressTime(data.progress_ms + elapsed);
-        setCurrentLyrics(data.lyrics);
         return data;
       }
     },
@@ -47,15 +49,14 @@ function App() {
     if (progressTime) {
       const interval = setInterval(() => {
         setProgressTime(progressTime + 250);
-        if (currentLyrics) {
-          setCurrentLineIndex(getLyricsIndex(currentLyrics, progressTime));
-          console.log(currentLineIndex);
+        if (currentSong) {
+          setCurrentLineIndex(getLyricsIndex(currentSong.lyrics, progressTime))
         }
       }, 250);
 
       return () => clearInterval(interval); // cleanup
     }
-  }, [progressTime]); 
+  }, [progressTime]);
 
   useEffect(() => {
     const fun = async () => {
@@ -86,7 +87,7 @@ function App() {
   if (currentlyPlaying.isLoading) {
     playing = <div>loading...</div>
   } else if (currentlyPlaying.error) {
-    playing = <div>error loading song.</div>
+    playing = <div>no song is detected.</div>
   } else if (currentlyPlaying.data) {
     // console.log(currentlyPlaying.data)
     if (!currentlyPlaying.data.isPlaying) {
@@ -108,12 +109,22 @@ function App() {
             {
               playing
             }
-            {/* {
-              currentLyrics?.map(lyric => {
-                return currentLineIndex === lyric.index ? <div style={{ border: '1px solid black' }}>{lyric.line}</div> : <div>{lyric.line}</div>
+            {
+              currentSong?.lyrics.map(line => {
+                if (line.id === currentLineIndex) {
+                  return (
+                    <div style={{ border:'1px solid black' }}>
+                      <div style={{ fontWeight: 'bold', fontSize: '1.25rem' }}>{line.translated}</div>
+                      <div>{line.original}</div>
+                    </div>)
                 }
-              )
-            } */}
+                return (
+                  <div>
+                    <div style={{ fontWeight: 'bold', fontSize: '1.25rem' }}>{line.translated}</div>
+                    <div>{line.original}</div>
+                  </div>)
+              })
+            }
           </div>
         </div>
         : <button type="submit" onClick={loginSpotify}>login with spotify</button>

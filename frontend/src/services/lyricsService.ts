@@ -1,10 +1,11 @@
 import axios from 'axios';
 
-const searchByTrackAndArtist = async (trackName: string, artistName: string) => {
-    const { data } = await axios.get(`https://lrclib.net/api/search?track_name=${trackName}&artist_name=${artistName}`);
+const getLyrics = async (trackName: string, artistName: string) => {
+    const body = { trackName, artistName };
+    const { data } = await axios.post(`http://localhost:3000/api/getlyrics`, body);
     return data;
 }
 
 export default {
-    searchByTrackAndArtist
+    getLyrics
 }

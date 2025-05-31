@@ -1,3 +1,15 @@
+import { translate } from 'google-translate-api-x';
+
+export const findSyncedLyrics = (lrcList: {syncedLyrics: string}[]) => {
+  for (let i = 0; i < lrcList.length; i++) {
+    if (lrcList[i].syncedLyrics !== null) {
+      return lrcList[i].syncedLyrics;
+    }
+  }
+
+  return lrcList[0].syncedLyrics;
+};
+
 const extractTime = (text: string): number => {
   const match = text.match(/\[(\d+):(\d+)\.(\d+)\]/);
   if (!match) {
@@ -18,18 +30,37 @@ const extractLine = (text: string): string => {
   }
 
   return '';
-}
+};
 
-export const parseLyrics = (lyricsString: string): Array<{time?: number, line?: string}> | null => {
-  let parsed = lyricsString.split('\n');
+const getTranslatedLyrics = async (lyricsString: string) => {
+  let splitLyrics = lyricsString.split('\n');
+  splitLyrics = splitLyrics.map(lyric => extractLine(lyric));
+  const stringToTranslate = splitLyrics.join('\n---');
+  console.log(stringToTranslate);
+  let {text} = await translate(stringToTranslate, { to: 'en' });
+  return text.split('\n---');
+};
+
+export const getOriginalAndTranslatedLyrics = async (lyricsString: string) => {
+  const parsed = lyricsString.split('\n');
+  const translatedLyrics = await getTranslatedLyrics(lyricsString);
+
 
   console.log('parse lyrics:', parsed);
-  let i = -1;
-  return parsed.map(line => { 
-        i++;
-        return { index: i, time: extractTime(line), line: extractLine(line) };
-    });
+  let to_return = [];
+  for (let i = 0; i < parsed.length; i++) {
+    to_return[i] = {
+      id: i, 
+      time: extractTime(parsed[i]),
+      original: extractLine(parsed[i]), 
+      translated: translatedLyrics[i]
+    };
+  }
+
+  return to_return;
 };
+
+
 
 
 
