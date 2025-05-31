@@ -4,6 +4,33 @@ import usersService from './services/usersService';
 import prettyMs from 'pretty-ms';
 import lyricsService from './services/lyricsService';
 
+interface SpotifyProfile {
+    country: string;
+    display_name: string;
+    email: string;
+    explicit_content: { 
+        filter_enabled: boolean;
+        filter_locked: boolean;
+    };
+    external_urls: {
+        spotify: string;
+    };
+    followers: { 
+        href: unknown;
+        total: number;
+    };
+    href: string;
+    id: string;
+    images: Array<{ 
+        height: number; 
+        url: string; 
+        width: number; 
+    }>;
+    product: string;
+    type: string;
+    uri: string;
+}
+
 const getLyricsIndex = (currentLyrics: Object[], currentTimestamp: number): number => {
   const length = currentLyrics.length;
   for (let i = 0; i < length - 1; i++) {
@@ -16,11 +43,11 @@ const getLyricsIndex = (currentLyrics: Object[], currentTimestamp: number): numb
 }
 
 function App() {
-  const [loggedIn, setLoggedIn] = useState(false);
-  const [user, setUser] = useState(null);
-  const [progressTime, setProgressTime] = useState(null);
-  const [currentSong, setCurrentSong] = useState(null);
-  const [currentLineIndex, setCurrentLineIndex] = useState(0);
+  const [loggedIn, setLoggedIn] = useState<boolean>(false);
+  const [user, setUser] = useState<SpotifyProfile | null>(null);
+  const [progressTime, setProgressTime] = useState<number>(0);
+  const [currentSong, setCurrentSong] = useState<any>(null);
+  const [currentLineIndex, setCurrentLineIndex] = useState<number>(0);
 
   const currentlyPlaying = useQuery({
     queryKey: ['currently-playing'],
@@ -28,8 +55,6 @@ function App() {
       if (loggedIn) {
         const timeOfRequest = Date.now()
         const data = await usersService.getCurrentlyPlaying();
-        // Compute time elapsed since the data was fetched
-
         if (currentSong === null || data.item.id !== currentSong.item.id) {
           try {
             const { translatedLyrics } = await lyricsService.getLyrics(data.item.name, data.item.artists[0].name);
