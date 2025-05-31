@@ -59,8 +59,3 @@ export const getOriginalAndTranslatedLyrics = async (lyricsString: string) => {
 
   return to_return;
 };
-
-
-
-
-

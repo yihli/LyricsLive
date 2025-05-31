@@ -114,7 +114,7 @@ function App() {
                 if (line.id === currentLineIndex) {
                   return (
                     <div style={{ border:'1px solid black' }}>
-                      <div style={{ fontWeight: 'bold', fontSize: '1.25rem' }}>{line.translated}</div>
+                      <div style={{ fontWeight: 'bold', fontSize: '1.25rem'  }}>{line.translated}</div>
                       <div>{line.original}</div>
                     </div>)
                 }

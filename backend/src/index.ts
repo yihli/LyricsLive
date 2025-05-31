@@ -5,7 +5,6 @@ import cors from 'cors';
 import { z } from 'zod';
 import 'dotenv/config';
 
-// import { parseLyrics } from './utils';
 import Encryption from './encryption';
 import { findSyncedLyrics, getOriginalAndTranslatedLyrics } from './utils';
 
@@ -63,12 +62,11 @@ app.get('/', (_, res) => {
 });
 
 app.post('/api/logout', (req, res) => {
-    console.log('/api/logout: ', req.session.user);
     if (!req.session.user) {
         throw new Error('/api/logout: no session found.')
     } else {
         req.session.destroy(() => {
-            console.log('session destroyed.')
+            console.log('Session destroyed.')
         })
         res.status(200).send('Successfully logged out');
     }
@@ -98,7 +96,6 @@ app.post('/api/getlyrics', async (req, res) => {
         method: 'GET'
     });
     const currentSongLyricsJson = await currentSongLyrics.json();
-    // console.log('current song lyrics:', currentSongLyricsJson[0]);
     const translatedLyrics = await getOriginalAndTranslatedLyrics(findSyncedLyrics(currentSongLyricsJson));
     res.send({translatedLyrics});
 });
@@ -120,21 +117,6 @@ app.get('/api/currentlyplaying', async (req, res) => {
 
     try {
         const currentSongJson = await currentSongResponse.json();
-        
-        console.log(currentSongJson)
-
-        // REFACTOR INTO THE GETLYRICS ENDPOINT
-        // const trackName = currentSongJson.item.name;
-        // const artistName = currentSongJson.item.album.artists[0].name;
-        // const currentSongLyrics = await fetch(lrcLibSearchUrl(trackName, artistName), {
-        //     method: 'GET'
-        // });
-        // const currentSongLyricsJson = await currentSongLyrics.json();
-        // console.log('current song lyrics:', currentSongLyricsJson[0])
-
-
-        // res.send({ isPlaying: true, lyrics: parseLyrics(currentSongLyricsJson[0].syncedLyrics), ...currentSongJson });
-
         res.send({ isPlaying: true, ...currentSongJson });
     } catch (e) {
         res.send({ isPlaying: false })
@@ -157,8 +139,6 @@ app.get('/api/me', async (req, res) => {
         }
     });
     const userDetailsJson = await userDetailsResponse.json();
-
-    console.log('/api/me called.')
     res.send(userDetailsJson);
 });
 
@@ -188,15 +168,10 @@ app.get('/callback', async (req: Request<any, any, any, SpotifyCallbackQuery>, r
     });
 
     const authCodeJson = await authCodeResponse.json();
-    console.log('/callback acess and refresh token response:', authCodeJson);
 
     // saved the encrypted refreshtoken in a session cookie.
     const encryptedRefreshToken = Encryption.encrypt(authCodeJson.refresh_token);
     req.session.user = { encryptedRefreshToken: encryptedRefreshToken, access_token: authCodeJson.access_token };
-
-    console.log('req.session.user sucessfully saved: ', req.session.user.encryptedRefreshToken);
-    console.log('req.session.user.access_token saved:', req.session.user.access_token);
-
     res.redirect('http://localhost:5173/');
 });
 
