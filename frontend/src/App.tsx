@@ -7,6 +7,7 @@ import lyricsService from './services/lyricsService';
 import type { SpotifyProfile, CurrentSpotifySong } from './types';
 
 import LyricsDisplay from './components/LyricsDisplay';
+import SongDisplay from './components/SongDisplay';
 
 function App() {
   const [loggedIn, setLoggedIn] = useState<boolean>(false);
@@ -96,9 +97,7 @@ function App() {
         ? <div>
           welcome {user.display_name} <button type='button' onClick={logoutSpotify}>logout</button>
           <div>
-            {
-              playing
-            }
+            <SongDisplay currentlyPlaying={currentlyPlaying} progressTime={progressTime} />
             <LyricsDisplay lyrics={currentSong?.lyrics} currentTimestamp={progressTime} />
           </div>
         </div>
