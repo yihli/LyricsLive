@@ -32,13 +32,13 @@ interface SpotifyProfile {
 }
 
 interface SyncedLyrics {
-    id: number;
-    time: number;
-    original: string;
+  id: number;
+  time: number;
+  original: string;
 }
 
 interface TranslatedSyncedLyrics extends SyncedLyrics {
-    translated: string;
+  translated: string;
 }
 
 interface CurrentSpotifySong {
@@ -161,6 +161,10 @@ function App() {
     },
     refetchInterval: 1000 * 5,
   });
+
+  useEffect(() => {
+    currentlyPlaying.refetch();
+  }, [loggedIn]);
 
   useEffect(() => {
     if (progressTime) {
