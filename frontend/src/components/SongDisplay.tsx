@@ -22,7 +22,7 @@ const SongDisplay = ({ currentlyPlaying, progressTime }: Props) => {
     const songImageUrl: string = currentlyPlaying.data.item.album.images[0].url;
     const songDuration: number = currentlyPlaying.data.item.duration_ms;
     return (
-        <div>
+        <div className='w-[20rem]'>
             <img src={songImageUrl}></img>
             <div className='text-xl font-bold'>{songName}</div>
             <div>{artistName}</div>

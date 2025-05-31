@@ -75,33 +75,14 @@ function App() {
     setUser(null);
     setLoggedIn(false);
   }
-
-  let playing = <div></div>;
-  if (currentlyPlaying.isLoading) {
-    playing = <div>loading...</div>
-  } else if (currentlyPlaying.error) {
-    playing = <div>no song is detected.</div>
-  } else if (currentlyPlaying.data) {
-    if (!currentlyPlaying.data.isPlaying) {
-      playing = <div> no song is playing. </div>
-    } else {
-      playing = <div>
-        current playing: {currentlyPlaying.data.item.name} by {currentlyPlaying.data.item.album.artists[0].name}
-        <div>time: {prettyMs(progressTime, { colonNotation: true, secondsDecimalDigits: 0 })}/{prettyMs(currentlyPlaying.data.item.duration_ms, { colonNotation: true, secondsDecimalDigits: 0 })}</div>
-      </div>
-    }
-  }
-
   return (
-    <div>
+    <div className='h-screen'>
       {user
-        ? <div>
-          welcome {user.display_name} <button type='button' onClick={logoutSpotify}>logout</button>
-          <div>
-            <SongDisplay currentlyPlaying={currentlyPlaying} progressTime={progressTime} />
-            <LyricsDisplay lyrics={currentSong?.lyrics} currentTimestamp={progressTime} />
-          </div>
-        </div>
+        ?  <div className='h-full p-2 flex flex-col md:flex-row gap-6 md:items-center'>
+              <SongDisplay currentlyPlaying={currentlyPlaying} progressTime={progressTime} />
+              <LyricsDisplay lyrics={currentSong?.lyrics} currentTimestamp={progressTime} />
+            </div>
+        
         : <button type="submit" onClick={loginSpotify}>login with spotify</button>
       }
 
