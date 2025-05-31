@@ -67,6 +67,14 @@ interface SpotifyProfile {
     uri: string;
 }
 
+interface AuthCodeResponse {
+  access_token: string;
+  token_type: string;
+  expires_in: number;
+  refresh_token: string;
+  scope: string;
+}
+
 const MONGODB_URI: string = z.string().parse(process.env.MONGODB_URI);
 const CLIENT_ID: string = z.string().parse(process.env.CLIENT_ID);
 const CLIENT_SECRET: string = z.string().parse(process.env.CLIENT_SECRET);
@@ -224,8 +232,7 @@ app.get('/callback', async (req: Request<any, any, any, SpotifyCallbackQuery>, r
         body: params.toString(),
     });
 
-    const authCodeJson = await authCodeResponse.json();
-
+    const authCodeJson: AuthCodeResponse = await authCodeResponse.json();
     // saved the encrypted refreshtoken in a session cookie.
     const encryptedRefreshToken = Encryption.encrypt(authCodeJson.refresh_token);
     req.session.user = { encryptedRefreshToken: encryptedRefreshToken, access_token: authCodeJson.access_token };
