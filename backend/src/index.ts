@@ -8,6 +8,38 @@ import 'dotenv/config';
 import Encryption from './encryption';
 import { findSyncedLyrics, getOriginalAndTranslatedLyrics } from './utils';
 
+interface SpotifyCallbackQuery {
+    error?: string;
+    code: string;
+}
+
+interface LyricsRequest {
+    artistName: string;
+    trackName: string;
+}
+
+interface LrcLibResult {
+    id: number;
+    name: string;
+    trackName: string;
+    artistName: string;
+    albumName: string;
+    duration: number;
+    instrumental: boolean;
+    plainLyrics: string;
+    syncedLyrics: string;
+}
+
+interface SyncedLyrics {
+    id: number;
+    time: number;
+    original: string;
+}
+
+interface TranslatedSyncedLyrics extends SyncedLyrics {
+    translated: string;
+}
+
 const MONGODB_URI: string = z.string().parse(process.env.MONGODB_URI);
 const CLIENT_ID: string = z.string().parse(process.env.CLIENT_ID);
 const CLIENT_SECRET: string = z.string().parse(process.env.CLIENT_SECRET);
@@ -27,16 +59,6 @@ declare module 'express-session' {
     interface SessionData {
         user?: { encryptedRefreshToken: string, access_token: string };
     }
-}
-
-interface SpotifyCallbackQuery {
-    error?: string;
-    code: string;
-}
-
-interface LyricsRequest {
-    artistName: string;
-    trackName: string;
 }
 
 const app = express();
@@ -101,8 +123,10 @@ app.post('/api/getlyrics', async (req: Request<any,any, LyricsRequest>, res: Res
     const currentSongLyrics = await fetch(lrcLibSearchUrl(trackName, artistName), {
         method: 'GET'
     });
-    const currentSongLyricsJson = await currentSongLyrics.json();
-    const translatedLyrics = await getOriginalAndTranslatedLyrics(findSyncedLyrics(currentSongLyricsJson));
+    const currentSongLyricsJson: Array<LrcLibResult> = await currentSongLyrics.json();
+
+    const translatedLyrics: Array<TranslatedSyncedLyrics> = await getOriginalAndTranslatedLyrics(findSyncedLyrics(currentSongLyricsJson));
+    
     res.send({translatedLyrics});
 });
 
