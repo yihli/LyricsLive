@@ -5,33 +5,123 @@ import prettyMs from 'pretty-ms';
 import lyricsService from './services/lyricsService';
 
 interface SpotifyProfile {
-    country: string;
-    display_name: string;
-    email: string;
-    explicit_content: { 
-        filter_enabled: boolean;
-        filter_locked: boolean;
-    };
-    external_urls: {
-        spotify: string;
-    };
-    followers: { 
-        href: unknown;
-        total: number;
-    };
-    href: string;
-    id: string;
-    images: Array<{ 
-        height: number; 
-        url: string; 
-        width: number; 
-    }>;
-    product: string;
-    type: string;
-    uri: string;
+  country: string;
+  display_name: string;
+  email: string;
+  explicit_content: {
+    filter_enabled: boolean;
+    filter_locked: boolean;
+  };
+  external_urls: {
+    spotify: string;
+  };
+  followers: {
+    href: unknown;
+    total: number;
+  };
+  href: string;
+  id: string;
+  images: Array<{
+    height: number;
+    url: string;
+    width: number;
+  }>;
+  product: string;
+  type: string;
+  uri: string;
 }
 
-const getLyricsIndex = (currentLyrics: Object[], currentTimestamp: number): number => {
+interface SyncedLyrics {
+    id: number;
+    time: number;
+    original: string;
+}
+
+interface TranslatedSyncedLyrics extends SyncedLyrics {
+    translated: string;
+}
+
+interface CurrentSpotifySong {
+  timestamp: number;
+  context: {
+    external_urls: {
+      spotify: string;
+    },
+    href: string;
+    type: string;
+    uri: string;
+  },
+  progress_ms: number;
+  item: {
+    album: {
+      album_type: string;
+      artists: Array<{
+        external_urls: {
+          spotify: string;
+        };
+        href: string;
+        id: string;
+        name: string;
+        type: string;
+        uri: string;
+      }>,
+      available_markets: string[],
+      external_urls: Array<{
+        spotify: string;
+      }>,
+      href: string;
+      id: string;
+      images: Array<{
+        height: number;
+        url: string;
+        width: string;
+      }>,
+      name: string;
+      release_date: string;
+      release_date_precision: string;
+      total_tracks: number;
+      type: string;
+      uri: string;
+    },
+    artists: Array<{
+      external_urls: {
+        spotify: string;
+      };
+      href: string;
+      id: string;
+      name: string;
+      type: string;
+      uri: string;
+    }>,
+    available_markets: string[],
+    disc_number: number;
+    duration_ms: 195520,
+    explicit: boolean;
+    external_ids: { isrc: string; };
+    external_urls: {
+      spotify: string;
+    },
+    href: string;
+    id: string;
+    is_local: boolean;
+    name: string;
+    popularity: number;
+    preview_url: string;
+    track_number: number;
+    type: string;
+    uri: string;
+  },
+  currently_playing_type: string;
+  actions: {
+    disallows: {
+      resuming: boolean;
+    }
+  };
+  is_playing: boolean;
+  lyrics: Array<TranslatedSyncedLyrics>
+}
+
+const getLyricsIndex = (currentLyrics: Array<TranslatedSyncedLyrics>, currentTimestamp: number): number => {
   const length = currentLyrics.length;
   for (let i = 0; i < length - 1; i++) {
     if (currentLyrics[i].time <= currentTimestamp && currentTimestamp <= currentLyrics[i + 1].time) {
@@ -46,7 +136,7 @@ function App() {
   const [loggedIn, setLoggedIn] = useState<boolean>(false);
   const [user, setUser] = useState<SpotifyProfile | null>(null);
   const [progressTime, setProgressTime] = useState<number>(0);
-  const [currentSong, setCurrentSong] = useState<any>(null);
+  const [currentSong, setCurrentSong] = useState<CurrentSpotifySong | null>(null);
   const [currentLineIndex, setCurrentLineIndex] = useState<number>(0);
 
   const currentlyPlaying = useQuery({
@@ -133,12 +223,12 @@ function App() {
             {
               playing
             }
-            { currentSong
+            {currentSong
               ? currentSong?.lyrics.map(line => {
                 if (line.id === currentLineIndex) {
                   return (
-                    <div style={{ border:'1px solid black' }}>
-                      <div style={{ fontWeight: 'bold', fontSize: '1.25rem'  }}>{line.translated}</div>
+                    <div style={{ border: '1px solid black' }}>
+                      <div style={{ fontWeight: 'bold', fontSize: '1.25rem' }}>{line.translated}</div>
                       <div>{line.original}</div>
                     </div>)
                 }
