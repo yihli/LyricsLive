@@ -24,7 +24,7 @@ const SongDisplay = ({ currentlyPlaying, progressTime }: Props) => {
     return (
         <div>
             <img src={songImageUrl}></img>
-            <div>{songName}</div>
+            <div className='text-xl font-bold'>{songName}</div>
             <div>{artistName}</div>
             <div>{albumName}</div>
             <div>{prettyMs(progressTime, { colonNotation: true, secondsDecimalDigits: 0 })}/{prettyMs(songDuration, { colonNotation: true, secondsDecimalDigits: 0 })}</div>
