@@ -32,9 +32,13 @@ function App() {
         console.log('data from query:', data);
 
         if (currentSong === null || data.item.id !== currentSong.item.id) {
-          const { translatedLyrics } = await lyricsService.getLyrics(data.item.name, data.item.artists[0].name);
-          console.log(translatedLyrics);
-          setCurrentSong({ ...data, lyrics: translatedLyrics });
+          try {
+            const { translatedLyrics } = await lyricsService.getLyrics(data.item.name, data.item.artists[0].name);
+            console.log(translatedLyrics);
+            setCurrentSong({ ...data, lyrics: translatedLyrics });
+          } catch (e) {
+            setCurrentSong(null);
+          }
         }
         const timeReturned = Date.now();
         const elapsed = timeReturned - timeOfRequest;
@@ -109,8 +113,8 @@ function App() {
             {
               playing
             }
-            {
-              currentSong?.lyrics.map(line => {
+            { currentSong
+              ? currentSong?.lyrics.map(line => {
                 if (line.id === currentLineIndex) {
                   return (
                     <div style={{ border:'1px solid black' }}>
@@ -124,6 +128,9 @@ function App() {
                     <div>{line.original}</div>
                   </div>)
               })
+
+              : <div>no lyrics found for this song</div>
+
             }
           </div>
         </div>

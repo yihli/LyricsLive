@@ -57,23 +57,23 @@ app.use(session({
     }
 }));
 
-app.get('/', (_, res) => {
+app.get('/', (_: Request, res: Response) => {
     res.send('hello world!');
 });
 
-app.post('/api/logout', (req, res) => {
+app.post('/api/logout', (req: Request, res: Response) => {
     if (!req.session.user) {
         throw new Error('/api/logout: no session found.')
     } else {
         req.session.destroy(() => {
             console.log('Session destroyed.')
         })
-        res.status(200).send('Successfully logged out');
+        res.status(200).send({ message: 'Successfully logged out'});
     }
 })
 
 // if a session exists, the user has logged in before and the refresh token exists.
-app.get('/api/login', async (req, res) => {
+app.get('/api/login', async (req: Request, res: Response) => {
     if (req.session.user) {
         res.json({ isLoggedIn: true });
 
@@ -82,7 +82,7 @@ app.get('/api/login', async (req, res) => {
     }
 });
 
-app.post('/api/getlyrics', async (req, res) => {
+app.post('/api/getlyrics', async (req: Request, res: Response) => {
     const lrcLibSearchUrl = (trackName: string, artistName: string): string => {
         return `https://lrclib.net/api/search?track_name=${trackName}&artist_name=${artistName}`;
     };
@@ -100,7 +100,7 @@ app.post('/api/getlyrics', async (req, res) => {
     res.send({translatedLyrics});
 });
 
-app.get('/api/currentlyplaying', async (req, res) => {
+app.get('/api/currentlyplaying', async (req: Request, res: Response) => {
     const currentPlayingUrl: string = 'https://api.spotify.com/v1/me/player/currently-playing';
 
     if (!req.session.user) {
@@ -123,7 +123,7 @@ app.get('/api/currentlyplaying', async (req, res) => {
     }
 })
 
-app.get('/api/me', async (req, res) => {
+app.get('/api/me', async (req: Request, res: Response) => {
     const userDetailsUrl: string = 'https://api.spotify.com/v1/me';
     const accessToken: string = z.string().parse(req.session.user?.access_token);
 
