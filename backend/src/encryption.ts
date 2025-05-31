@@ -1,6 +1,8 @@
 import crypto from 'crypto';
+import 'dotenv/config'
+import { z } from 'zod';
 
-const key = 'e6GhTKWCuEiT2oMmJHJ3UAcwdo6melS0'; // Store this securely (e.g. in env)
+const key = z.string().parse(process.env.CRYPTO_KEY); // Store this securely (e.g. in env)
 const iv = crypto.randomBytes(12);  // 12 bytes for GCM
 
 const encrypt = (text: string) => {
