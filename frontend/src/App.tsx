@@ -4,25 +4,15 @@ import usersService from './services/usersService';
 import prettyMs from 'pretty-ms';
 import lyricsService from './services/lyricsService';
 
-import type { TranslatedSyncedLyrics, SpotifyProfile, CurrentSpotifySong } from './types';
+import type { SpotifyProfile, CurrentSpotifySong } from './types';
 
-const getLyricsIndex = (currentLyrics: Array<TranslatedSyncedLyrics>, currentTimestamp: number): number => {
-  const length = currentLyrics.length;
-  for (let i = 0; i < length - 1; i++) {
-    if (currentLyrics[i].time <= currentTimestamp && currentTimestamp <= currentLyrics[i + 1].time) {
-      return i;
-    }
-  }
-
-  return -1;
-}
+import LyricsDisplay from './components/LyricsDisplay';
 
 function App() {
   const [loggedIn, setLoggedIn] = useState<boolean>(false);
   const [user, setUser] = useState<SpotifyProfile | null>(null);
   const [progressTime, setProgressTime] = useState<number>(0);
   const [currentSong, setCurrentSong] = useState<CurrentSpotifySong | null>(null);
-  const [currentLineIndex, setCurrentLineIndex] = useState<number>(0);
 
   const currentlyPlaying = useQuery({
     queryKey: ['currently-playing'],
@@ -55,9 +45,6 @@ function App() {
     if (progressTime) {
       const interval = setInterval(() => {
         setProgressTime(progressTime + 250);
-        if (currentSong) {
-          setCurrentLineIndex(getLyricsIndex(currentSong.lyrics, progressTime))
-        }
       }, 250);
 
       return () => clearInterval(interval); // cleanup
@@ -112,25 +99,7 @@ function App() {
             {
               playing
             }
-            {currentSong
-              ? currentSong?.lyrics.map(line => {
-                if (line.id === currentLineIndex) {
-                  return (
-                    <div style={{ border: '1px solid black' }}>
-                      <div style={{ fontWeight: 'bold', fontSize: '1.25rem' }}>{line.translated}</div>
-                      <div>{line.original}</div>
-                    </div>)
-                }
-                return (
-                  <div>
-                    <div style={{ fontWeight: 'bold', fontSize: '1.25rem' }}>{line.translated}</div>
-                    <div>{line.original}</div>
-                  </div>)
-              })
-
-              : <div>no lyrics found for this song</div>
-
-            }
+            <LyricsDisplay lyrics={currentSong?.lyrics} currentTimestamp={progressTime} />
           </div>
         </div>
         : <button type="submit" onClick={loginSpotify}>login with spotify</button>
