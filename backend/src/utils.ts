@@ -36,7 +36,6 @@ const getTranslatedLyrics = async (lyricsString: string) => {
   let splitLyrics = lyricsString.split('\n');
   splitLyrics = splitLyrics.map(lyric => extractLine(lyric));
   const stringToTranslate = splitLyrics.join('\n---');
-  console.log(stringToTranslate);
   let {text} = await translate(stringToTranslate, { to: 'en' });
   return text.split('\n---');
 };
@@ -45,8 +44,6 @@ export const getOriginalAndTranslatedLyrics = async (lyricsString: string) => {
   const parsed = lyricsString.split('\n');
   const translatedLyrics = await getTranslatedLyrics(lyricsString);
 
-
-  console.log('parse lyrics:', parsed);
   let to_return = [];
   for (let i = 0; i < parsed.length; i++) {
     to_return[i] = {
