@@ -29,12 +29,10 @@ function App() {
         const timeOfRequest = Date.now()
         const data = await usersService.getCurrentlyPlaying();
         // Compute time elapsed since the data was fetched
-        console.log('data from query:', data);
 
         if (currentSong === null || data.item.id !== currentSong.item.id) {
           try {
             const { translatedLyrics } = await lyricsService.getLyrics(data.item.name, data.item.artists[0].name);
-            console.log(translatedLyrics);
             setCurrentSong({ ...data, lyrics: translatedLyrics });
           } catch (e) {
             setCurrentSong(null);
@@ -66,11 +64,9 @@ function App() {
     const fun = async () => {
       if (!loggedIn) {
         const isLoggedIn = await usersService.isLoggedIn();
-        console.log('is logged in:', isLoggedIn)
         setLoggedIn(isLoggedIn);
       } else {
         const profile = await usersService.getUserProfile();
-        console.log(profile);
         setUser(profile);
       }
     }
@@ -93,7 +89,6 @@ function App() {
   } else if (currentlyPlaying.error) {
     playing = <div>no song is detected.</div>
   } else if (currentlyPlaying.data) {
-    // console.log(currentlyPlaying.data)
     if (!currentlyPlaying.data.isPlaying) {
       playing = <div> no song is playing. </div>
     } else {

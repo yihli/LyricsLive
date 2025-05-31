@@ -1,6 +1,7 @@
 import { translate } from 'google-translate-api-x';
 
-export const findSyncedLyrics = (lrcList: {syncedLyrics: string}[]) => {
+
+export const findSyncedLyrics = (lrcList: { syncedLyrics: string }[]) => {
   for (let i = 0; i < lrcList.length; i++) {
     if (lrcList[i].syncedLyrics !== null) {
       return lrcList[i].syncedLyrics;

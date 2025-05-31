@@ -8,6 +8,11 @@ import 'dotenv/config';
 import Encryption from './encryption';
 import { findSyncedLyrics, getOriginalAndTranslatedLyrics } from './utils';
 
+/*
+TODO:
+    - even without synced lyrics, show only the regular lyrics.
+*/
+
 interface SpotifyCallbackQuery {
     error?: string;
     code: string;
