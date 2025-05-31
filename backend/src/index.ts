@@ -34,6 +34,11 @@ interface SpotifyCallbackQuery {
     code: string;
 }
 
+interface LyricsRequest {
+    artistName: string;
+    trackName: string;
+}
+
 const app = express();
 
 // must allow credentials to match sessions in the front and backend.
@@ -82,12 +87,13 @@ app.get('/api/login', async (req: Request, res: Response) => {
     }
 });
 
-app.post('/api/getlyrics', async (req: Request, res: Response) => {
+app.post('/api/getlyrics', async (req: Request<any,any, LyricsRequest>, res: Response) => {
     const lrcLibSearchUrl = (trackName: string, artistName: string): string => {
         return `https://lrclib.net/api/search?track_name=${trackName}&artist_name=${artistName}`;
     };
 
-    const { trackName, artistName } = req.body
+    const trackName = z.string().parse(req.body.trackName);
+    const artistName = z.string().parse(req.body.artistName);
     if (!trackName || !artistName) {
         throw new Error ('Missing track name or artist name.')
     }
