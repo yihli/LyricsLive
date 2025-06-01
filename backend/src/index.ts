@@ -51,6 +51,8 @@ app.use(cors(
 
 app.use(express.json());
 
+app.set('trust proxy', 1);
+
 // Session middleware
 app.use(session({
     secret: SESSION_KEY,
