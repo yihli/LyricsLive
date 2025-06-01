@@ -75,9 +75,11 @@ function App() {
   }
   return (
     <div className='h-screen w-screen bg-blue-200 open-sans'>
-      <div className='flex flex-row items-center pl-4 h-[4.5rem] tracking-tight bg-blue-500 work-sans text-[2.5rem] text-gray-300'>LyricsLive</div>
+      <div className='flex flex-row items-center pl-12 h-[4.5rem] bg-blue-500 '>
+        <div className='p-0 tracking-tight text-gray-300 work-sans text-[2.5rem]'>LyricsLive</div>
+      </div>
       {user
-        ?  <div className='h-[calc(100vh-4.5rem)] flex flex-col md:flex-row md:gap-6 md:py-4 md:px-8 md:items-center'>
+        ?  <div className='h-[calc(100vh-4.5rem)] flex flex-col md:flex-row md:gap-12 p-12 md:items-center'>
               <SongDisplay currentlyPlaying={currentlyPlaying} progressTime={progressTime} />
               <LyricsDisplay lyrics={currentSong?.lyrics} currentTimestamp={progressTime} />
             </div> 

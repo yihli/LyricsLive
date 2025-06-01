@@ -19,11 +19,7 @@ const getLyricsIndex = (currentLyrics: Array<TranslatedSyncedLyrics>, currentTim
 
 const LyricsDisplay = ({ lyrics, currentTimestamp }: Props) => {
 
-	if (lyrics === undefined) {
-		return <div> could not find lyrics. </div>
-	}
-
-	const currentIndex = getLyricsIndex(lyrics, currentTimestamp);
+	const currentIndex = lyrics ? getLyricsIndex(lyrics, currentTimestamp) : 0;
 	const currentLineRef = useRef<HTMLDivElement | null>(null);
 
 	useEffect(() => {
@@ -34,15 +30,16 @@ const LyricsDisplay = ({ lyrics, currentTimestamp }: Props) => {
 
 
 	return (
-		<div className='h-full flex-1 overflow-hidden bg-green-400 rounded-md tracking-tighter'>
-			{
-				lyrics.map(line =>
+
+		<div className='h-full flex-1 overflow-hidden bg-green-400 rounded-sm tracking-tighter'>
+			{	lyrics 
+			? lyrics.map(line =>
 				(
 					<div className={`p-3 bg-gray-200 rounded-2 ${line.id === currentIndex ? 'ml-4 text-xl' : 'text-xl'}`} ref={line.id === currentIndex ? currentLineRef : null}>
 						<div className='font-bold'>{line.translated}</div>
 						<div>{line.original}</div>
 					</div>))
-
+			: <div>no lyrics :-/</div>
 
 			}
 		</div>

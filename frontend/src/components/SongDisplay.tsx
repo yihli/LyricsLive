@@ -12,9 +12,13 @@ const SongDisplay = ({ currentlyPlaying, progressTime }: Props) => {
         return <div className='h-full w-[20rem] tracking-tighter'>Searching for song...</div>
     } else if (currentlyPlaying.error) {
         return <div className='h-full w-[20rem] tracking-tighter'>No song detected.</div>
+    } else if (!currentlyPlaying.data) {
+        return <div className='h-full w-[20rem] tracking-tighter'>No song detected.</div>
     } else if (currentlyPlaying.data.isPlaying === false) {
         return <div className='h-full w-[20rem] tracking-tighter'>No song detected.</div>
-    } 
+    }
+
+
     console.log(currentlyPlaying);
     const artistName: string = currentlyPlaying.data.item.album.artists[0].name;
     const albumName: string = currentlyPlaying.data.item.album.name;
@@ -23,7 +27,7 @@ const SongDisplay = ({ currentlyPlaying, progressTime }: Props) => {
     const songDuration: number = currentlyPlaying.data.item.duration_ms;
     return (
         <div className='h-full w-[20rem] tracking-tighter'>
-            <img className='rounded-md mb-2' src={songImageUrl}></img>
+            <img className='rounded-sm mb-2' src={songImageUrl}></img>
             <div className='flex flex-col '>
                 <div className='text-3xl font-bold'>{songName}</div>
                 <div className='text-2xl'>{artistName}</div>
