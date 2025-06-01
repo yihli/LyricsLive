@@ -150,6 +150,7 @@ app.get('/api/me', async (req: Request, res: Response) => {
             'Authorization': 'Bearer ' + accessToken
         }
     });
+    console.log(userDetailsResponse);
     const userDetailsJson: SpotifyProfile = await userDetailsResponse.json();
     res.send(userDetailsJson);
 });
