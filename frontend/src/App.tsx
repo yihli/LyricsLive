@@ -68,8 +68,8 @@ function App() {
     fun();
   }, [loggedIn]);
 
-  const loginSpotify = () => {
-    window.location.href = `https://accounts.spotify.com/authorize?response_type=code&client_id=f0bcfe3d707f4dcbb65099dd8eb719bc&scope=user-read-private%20user-read-email%20user-read-currently-playing&redirect_uri=http://localhost:3000/callback`;
+  const loginSpotify = async () => {
+    await usersService.login();
   }
 
   const logoutSpotify = async () => {

@@ -63,6 +63,10 @@ app.use(session({
     }
 }));
 
+app.get('/api/login', (_req: Request, res: Response) => {
+    res.redirect(`https:accounts.spotify.com/authorize?response_type=code&client_id=${CLIENT_ID}&scope=user-read-private%20user-read-email%20user-read-currently-playing&redirect_uri=http://localhost:3000/callback`)
+})
+
 app.post('/api/logout', (req: Request, res: Response) => {
     if (!req.session.user) {
         throw new Error('/api/logout: no session found.')
@@ -75,7 +79,7 @@ app.post('/api/logout', (req: Request, res: Response) => {
 })
 
 // if a session exists, the user has logged in before and the refresh token exists.
-app.get('/api/login', async (req: Request, res: Response) => {
+app.get('/api/isloggedin', async (req: Request, res: Response) => {
     if (req.session.user) {
         res.json({ isLoggedIn: true });
 

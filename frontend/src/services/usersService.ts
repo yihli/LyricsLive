@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const baseUrl = '/api/login';
+const baseUrl = '/api/isloggedin';
 
 // check if the backend has a session saved. 
 // if so, we can consider the user logged in and get their data.
@@ -24,6 +24,10 @@ const getCurrentlyPlaying = async () => {
     return data;
 }
 
+const login = async () => {
+    window.location.href = '/api/login';
+}
+
 const logout = async () => {
     const { data } = await axios.post('/api/logout', null, { withCredentials: true });
     return data
@@ -33,5 +37,6 @@ export default {
     isLoggedIn,
     getUserProfile,
     logout,
-    getCurrentlyPlaying
+    getCurrentlyPlaying,
+    login
 }
