@@ -9,6 +9,7 @@ import LyricsDisplay from './components/LyricsDisplay';
 import SongDisplay from './components/SongDisplay';
 import Navbar from './components/Navbar';
 import MainBodyCard from './components/MainBodyCard';
+import FeatureList from './components/FeatureList';
 
 function App() {
   const [loggedIn, setLoggedIn] = useState<boolean>(false);
@@ -85,8 +86,9 @@ function App() {
               <LyricsDisplay lyrics={currentSong?.lyrics} currentTimestamp={progressTime} />
             </div> 
         
-        : <div className='flex flex-col justify-center items-center'>
+        : <div className='flex flex-col justify-center items-center gap-10'>
             <MainBodyCard loginSpotify={loginSpotify}/>
+            <FeatureList />
           </div>
       }
 
