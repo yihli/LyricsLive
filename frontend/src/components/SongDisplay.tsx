@@ -12,12 +12,10 @@ const SongDisplay = ({ currentlyPlaying, progressTime }: Props) => {
         return <div className='h-full w-[20rem] tracking-tighter'>Searching for song...</div>
     } else if (currentlyPlaying.error) {
         return <div className='h-full w-[20rem] tracking-tighter'>No song detected.</div>
-    } else if (currentlyPlaying.data) {
-        
-    } else {
-        return <div></div>
-    }
-
+    } else if (currentlyPlaying.data.isPlaying === false) {
+        return <div className='h-full w-[20rem] tracking-tighter'>No song detected.</div>
+    } 
+    console.log(currentlyPlaying);
     const artistName: string = currentlyPlaying.data.item.album.artists[0].name;
     const albumName: string = currentlyPlaying.data.item.album.name;
     const songName: string = currentlyPlaying.data.item.name;

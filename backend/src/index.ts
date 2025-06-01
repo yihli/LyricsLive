@@ -178,7 +178,8 @@ app.get('/callback', async (req: Request<any, any, any, SpotifyCallbackQuery>, r
 
 
 app.use((error: Error, _req: Request, res: Response, _next: NextFunction) => {
-    res.status(500).send({ error: error.message });
+    console.log(error)
+    res.status(500).send({ error });
 });
 
 app.listen(PORT, () => {

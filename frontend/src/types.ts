@@ -113,5 +113,6 @@ export interface CurrentSpotifySong {
   };
   is_playing: boolean;
   lyrics: Array<TranslatedSyncedLyrics>
+  isPlaying: boolean;
 }
 
