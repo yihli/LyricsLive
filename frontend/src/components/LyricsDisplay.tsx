@@ -31,7 +31,7 @@ const LyricsDisplay = ({ lyrics, currentTimestamp }: Props) => {
 
 	return (
 
-		<div className='h-full flex-1 overflow-hidden bg-green-400 rounded-sm tracking-tighter'>
+		<div className={`h-full flex-1 overflow-hidden ${lyrics?'bg-green-400':'bg-gray-200'} rounded-sm tracking-tighter`}>
 			{	lyrics 
 			? lyrics.map(line =>
 				(
@@ -39,7 +39,7 @@ const LyricsDisplay = ({ lyrics, currentTimestamp }: Props) => {
 						<div className='font-bold'>{line.translated}</div>
 						<div>{line.original}</div>
 					</div>))
-			: <div>no lyrics :-/</div>
+			: <div className='h-full w-full flex justify-center items-center text-4xl'>There are no lyrics. Yet.</div>
 
 			}
 		</div>

@@ -8,6 +8,7 @@ import type { SpotifyProfile, CurrentSpotifySong } from './types';
 import LyricsDisplay from './components/LyricsDisplay';
 import SongDisplay from './components/SongDisplay';
 import Navbar from './components/Navbar';
+import MainBodyCard from './components/MainBodyCard';
 
 function App() {
   const [loggedIn, setLoggedIn] = useState<boolean>(false);
@@ -77,14 +78,16 @@ function App() {
 
   return (
     <div className='h-screen w-screen bg-blue-200 open-sans'>
-      <Navbar logoutSpotify={logoutSpotify} loginSpotify={loginSpotify} loggedIn={loggedIn} user={user}/> 
+      <Navbar logoutSpotify={logoutSpotify} loginSpotify={loginSpotify} loggedIn={loggedIn} user={user ? user : undefined}/> 
       {user
         ?  <div className='h-[calc(100vh-4.5rem)] flex flex-col md:flex-row md:gap-12 p-12 md:items-center'>
               <SongDisplay currentlyPlaying={currentlyPlaying} progressTime={progressTime} />
               <LyricsDisplay lyrics={currentSong?.lyrics} currentTimestamp={progressTime} />
             </div> 
         
-        : <div>list features</div>
+        : <div className='flex flex-col justify-center items-center'>
+            <MainBodyCard loginSpotify={loginSpotify}/>
+          </div>
       }
 
     </div>
