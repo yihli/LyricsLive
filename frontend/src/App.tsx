@@ -10,6 +10,7 @@ import SongDisplay from './components/SongDisplay';
 import Navbar from './components/Navbar';
 import MainBodyCard from './components/MainBodyCard';
 import FeatureList from './components/FeatureList';
+import Signature from './components/Signature';
 
 function App() {
   const [loggedIn, setLoggedIn] = useState<boolean>(false);
@@ -91,7 +92,7 @@ function App() {
             <FeatureList />
           </div>
       }
-
+      <Signature />
     </div>
   );
 }
