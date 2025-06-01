@@ -7,6 +7,7 @@ import type { SpotifyProfile, CurrentSpotifySong } from './types';
 
 import LyricsDisplay from './components/LyricsDisplay';
 import SongDisplay from './components/SongDisplay';
+import Navbar from './components/Navbar';
 
 function App() {
   const [loggedIn, setLoggedIn] = useState<boolean>(false);
@@ -73,18 +74,17 @@ function App() {
     setUser(null);
     setLoggedIn(false);
   }
+
   return (
     <div className='h-screen w-screen bg-blue-200 open-sans'>
-      <div className='flex flex-row items-center pl-12 h-[4.5rem] bg-blue-500 '>
-        <div className='p-0 tracking-tight text-gray-300 work-sans text-[2.5rem]'>LyricsLive</div>
-      </div>
+      <Navbar logoutSpotify={logoutSpotify} loginSpotify={loginSpotify} loggedIn={loggedIn} user={user}/> 
       {user
         ?  <div className='h-[calc(100vh-4.5rem)] flex flex-col md:flex-row md:gap-12 p-12 md:items-center'>
               <SongDisplay currentlyPlaying={currentlyPlaying} progressTime={progressTime} />
               <LyricsDisplay lyrics={currentSong?.lyrics} currentTimestamp={progressTime} />
             </div> 
         
-        : <button type="submit" onClick={loginSpotify}>login with spotify</button>
+        : <div>list features</div>
       }
 
     </div>
