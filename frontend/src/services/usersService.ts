@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const baseUrl = 'http://localhost:3000/api/login';
+const baseUrl = '/api/login';
 
 // check if the backend has a session saved. 
 // if so, we can consider the user logged in and get their data.
@@ -15,17 +15,17 @@ const isLoggedIn = async (): Promise<boolean> => {
 }
 
 const getUserProfile = async () => {
-    const { data }  = await axios.get('http://localhost:3000/api/me', { withCredentials: true });
+    const { data }  = await axios.get('/api/me', { withCredentials: true });
     return data;
 }
 
 const getCurrentlyPlaying = async () => {
-    const { data } = await axios.get('http://localhost:3000/api/currentlyplaying', { withCredentials: true });
+    const { data } = await axios.get('/api/currentlyplaying', { withCredentials: true });
     return data;
 }
 
 const logout = async () => {
-    const { data } = await axios.post('http://localhost:3000/api/logout', null, { withCredentials: true });
+    const { data } = await axios.post('/api/logout', null, { withCredentials: true });
     return data
 }
 

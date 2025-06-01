@@ -17,6 +17,9 @@ const CLIENT_ID: string = z.string().parse(process.env.CLIENT_ID);
 const CLIENT_SECRET: string = z.string().parse(process.env.CLIENT_SECRET);
 const SESSION_KEY: string = z.string().parse(process.env.SESSION_KEY);
 const PORT: number = Number(z.string().parse(process.env.PORT));
+const NODE_ENV: string = z.string().parse(process.env.NODE_ENV);
+
+console.log(NODE_ENV);
 
 mongoose.connect(MONGODB_URI)
     .then(() => {
@@ -54,15 +57,11 @@ app.use(session({
     saveUninitialized: false,  // only save sessions if something is stored
     cookie: {
         httpOnly: true,          // prevent client-side JS access
-        secure: false,           // set to true in production (requires HTTPS)
+        secure:  NODE_ENV === 'PRODUCTION' ? true : false,       // set to true in production (requires HTTPS)
         sameSite: 'strict',      // CSRF protection
         maxAge: 1000 * 60 * 60 * 72  // 3 days
     }
 }));
-
-// app.get('/', (_: Request, res: Response) => {
-//     res.send('hello world!');
-// });
 
 app.post('/api/logout', (req: Request, res: Response) => {
     if (!req.session.user) {
@@ -160,7 +159,7 @@ app.get('/callback', async (req: Request<any, any, any, SpotifyCallbackQuery>, r
     // use the authentication code to get an access token and refresh token
     const params = new URLSearchParams({
         code: query.code,
-        redirect_uri: 'http://localhost:3000/callback',
+        redirect_uri: NODE_ENV === 'PRODUCTION' ? '' : 'http://localhost:3000/callback',
         grant_type: 'authorization_code',
     });
 
@@ -178,7 +177,7 @@ app.get('/callback', async (req: Request<any, any, any, SpotifyCallbackQuery>, r
     // saved the encrypted refreshtoken in a session cookie.
     const encryptedRefreshToken = Encryption.encrypt(authCodeJson.refresh_token);
     req.session.user = { encryptedRefreshToken: encryptedRefreshToken, access_token: authCodeJson.access_token };
-    res.redirect('http://localhost:3000/');
+    res.redirect(NODE_ENV === 'PRODUCTION' ? '/' : 'http://localhost:3000/');
 });
 
 
