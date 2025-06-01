@@ -65,7 +65,7 @@ app.use(session({
 }));
 
 app.get('/api/login', (_req: Request, res: Response) => {
-    res.redirect(`https:accounts.spotify.com/authorize?response_type=code&client_id=${CLIENT_ID}&scope=user-read-private%20user-read-email%20user-read-currently-playing&redirect_uri=${CALLBACK_URL}`)
+    res.redirect(`https://accounts.spotify.com/authorize?response_type=code&client_id=${CLIENT_ID}&scope=user-read-private%20user-read-email%20user-read-currently-playing&redirect_uri=${CALLBACK_URL}`)
 })
 
 app.post('/api/logout', (req: Request, res: Response) => {
