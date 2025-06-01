@@ -159,7 +159,7 @@ app.get('/callback', async (req: Request<any, any, any, SpotifyCallbackQuery>, r
     // use the authentication code to get an access token and refresh token
     const params = new URLSearchParams({
         code: query.code,
-        redirect_uri: NODE_ENV === 'PRODUCTION' ? '' : 'http://localhost:3000/callback',
+        redirect_uri: NODE_ENV === 'PRODUCTION' ? '/callback' : 'http://localhost:3000/callback',
         grant_type: 'authorization_code',
     });
 
