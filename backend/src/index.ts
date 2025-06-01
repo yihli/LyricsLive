@@ -18,6 +18,7 @@ const CLIENT_SECRET: string = z.string().parse(process.env.CLIENT_SECRET);
 const SESSION_KEY: string = z.string().parse(process.env.SESSION_KEY);
 const PORT: number = Number(z.string().parse(process.env.PORT));
 const NODE_ENV: string = z.string().parse(process.env.NODE_ENV);
+const CALLBACK_URL: string = NODE_ENV === 'PRODUCTION' ? z.string().parse(process.env.PRODUCTION_CALLBACK) : z.string().parse(process.env.DEVELOPMENT_CALLBACK);
 
 console.log(NODE_ENV);
 
@@ -64,7 +65,7 @@ app.use(session({
 }));
 
 app.get('/api/login', (_req: Request, res: Response) => {
-    res.redirect(`https:accounts.spotify.com/authorize?response_type=code&client_id=${CLIENT_ID}&scope=user-read-private%20user-read-email%20user-read-currently-playing&redirect_uri=http://localhost:3000/callback`)
+    res.redirect(`https:accounts.spotify.com/authorize?response_type=code&client_id=${CLIENT_ID}&scope=user-read-private%20user-read-email%20user-read-currently-playing&redirect_uri=${CALLBACK_URL}`)
 })
 
 app.post('/api/logout', (req: Request, res: Response) => {
@@ -163,7 +164,7 @@ app.get('/callback', async (req: Request<any, any, any, SpotifyCallbackQuery>, r
     // use the authentication code to get an access token and refresh token
     const params = new URLSearchParams({
         code: query.code,
-        redirect_uri: NODE_ENV === 'PRODUCTION' ? '/callback' : 'http://localhost:3000/callback',
+        redirect_uri: CALLBACK_URL,
         grant_type: 'authorization_code',
     });
 

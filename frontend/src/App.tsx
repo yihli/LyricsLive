@@ -69,7 +69,7 @@ function App() {
   }, [loggedIn]);
 
   const loginSpotify = async () => {
-    await usersService.login();
+    await usersService.login()
   }
 
   const logoutSpotify = async () => {
