@@ -1,8 +1,6 @@
-import './styles.css'
 import { useEffect, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import usersService from './services/usersService';
-import prettyMs from 'pretty-ms';
 import lyricsService from './services/lyricsService';
 
 import type { SpotifyProfile, CurrentSpotifySong } from './types';
@@ -32,7 +30,7 @@ function App() {
         }
         const timeReturned = Date.now();
         const elapsed = timeReturned - timeOfRequest;
-        setProgressTime(data.progress_ms + elapsed);
+        setProgressTime(data.progress_ms + (elapsed));
         return data;
       }
     },
@@ -76,12 +74,13 @@ function App() {
     setLoggedIn(false);
   }
   return (
-    <div className='h-screen'>
+    <div className='h-screen w-screen bg-blue-200 open-sans'>
+      <div className='flex flex-row items-center pl-4 h-[4.5rem] tracking-tight bg-blue-500 work-sans text-[2.5rem] text-gray-300'>LyricsLive</div>
       {user
-        ?  <div className='h-full p-2 flex flex-col md:flex-row gap-6 md:items-center'>
+        ?  <div className='h-[calc(100vh-4.5rem)] flex flex-col md:flex-row md:gap-6 md:py-4 md:px-8 md:items-center'>
               <SongDisplay currentlyPlaying={currentlyPlaying} progressTime={progressTime} />
               <LyricsDisplay lyrics={currentSong?.lyrics} currentTimestamp={progressTime} />
-            </div>
+            </div> 
         
         : <button type="submit" onClick={loginSpotify}>login with spotify</button>
       }

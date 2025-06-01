@@ -34,22 +34,16 @@ const LyricsDisplay = ({ lyrics, currentTimestamp }: Props) => {
 
 
 	return (
-		<div className='h-full overflow-auto'>
+		<div className='h-full flex-1 overflow-hidden bg-green-400 rounded-md tracking-tighter'>
 			{
-				lyrics.map(line => {
-					if (line.id === currentIndex) {
-						return (
-							<div style={{ border: '1px solid black' }} ref={currentLineRef}>
-								<div style={{ fontWeight: 'bold', fontSize: '1.25rem' }}>{line.translated}</div>
-								<div>{line.original}</div>
-							</div>)
-					}
-					return (
-						<div>
-							<div style={{ fontWeight: 'bold', fontSize: '1.25rem' }}>{line.translated}</div>
-							<div>{line.original}</div>
-						</div>)
-				})
+				lyrics.map(line =>
+				(
+					<div className={`p-3 bg-gray-200 rounded-2 ${line.id === currentIndex ? 'ml-4 text-xl' : 'text-xl'}`} ref={line.id === currentIndex ? currentLineRef : null}>
+						<div className='font-bold'>{line.translated}</div>
+						<div>{line.original}</div>
+					</div>))
+
+
 			}
 		</div>
 	)

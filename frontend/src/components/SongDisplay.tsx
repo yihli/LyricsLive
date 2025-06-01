@@ -9,11 +9,13 @@ interface Props {
 
 const SongDisplay = ({ currentlyPlaying, progressTime }: Props) => {
     if (currentlyPlaying.isLoading) {
-        return <div>loading...</div>
+        return <div className='h-full w-[20rem] tracking-tighter'>Searching for song...</div>
     } else if (currentlyPlaying.error) {
-        return <div>no song is detected.</div>
-    } else if (!currentlyPlaying.data) {
-        return <div>error occurred.</div>
+        return <div className='h-full w-[20rem] tracking-tighter'>No song detected.</div>
+    } else if (currentlyPlaying.data) {
+        
+    } else {
+        return <div></div>
     }
 
     const artistName: string = currentlyPlaying.data.item.album.artists[0].name;
@@ -22,12 +24,14 @@ const SongDisplay = ({ currentlyPlaying, progressTime }: Props) => {
     const songImageUrl: string = currentlyPlaying.data.item.album.images[0].url;
     const songDuration: number = currentlyPlaying.data.item.duration_ms;
     return (
-        <div className='w-[20rem]'>
-            <img src={songImageUrl}></img>
-            <div className='text-xl font-bold'>{songName}</div>
-            <div>{artistName}</div>
-            <div>{albumName}</div>
-            <div>{prettyMs(progressTime, { colonNotation: true, secondsDecimalDigits: 0 })}/{prettyMs(songDuration, { colonNotation: true, secondsDecimalDigits: 0 })}</div>
+        <div className='h-full w-[20rem] tracking-tighter'>
+            <img className='rounded-md mb-2' src={songImageUrl}></img>
+            <div className='flex flex-col '>
+                <div className='text-3xl font-bold'>{songName}</div>
+                <div className='text-2xl'>{artistName}</div>
+                <div className='text-2xl'>[{albumName}]</div>
+                <div className='text-2xl'>{prettyMs(progressTime, { colonNotation: true, secondsDecimalDigits: 0 })}/{prettyMs(songDuration, { colonNotation: true, secondsDecimalDigits: 0 })}</div>
+            </div>
         </div>
     )
 };
