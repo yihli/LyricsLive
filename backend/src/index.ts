@@ -35,11 +35,15 @@ declare module 'express-session' {
 
 const app = express();
 
+app.use(express.static('dist'));
+
 // must allow credentials to match sessions in the front and backend.
-app.use(cors({
-    origin: 'http://localhost:5173',
-    credentials: true
-}));
+app.use(cors(
+    // {
+    // origin: 'http://localhost:5173',
+    // credentials: true
+    // }
+));
 
 app.use(express.json());
 
@@ -56,9 +60,9 @@ app.use(session({
     }
 }));
 
-app.get('/', (_: Request, res: Response) => {
-    res.send('hello world!');
-});
+// app.get('/', (_: Request, res: Response) => {
+//     res.send('hello world!');
+// });
 
 app.post('/api/logout', (req: Request, res: Response) => {
     if (!req.session.user) {
@@ -170,10 +174,11 @@ app.get('/callback', async (req: Request<any, any, any, SpotifyCallbackQuery>, r
     });
 
     const authCodeJson: AuthCodeResponse = await authCodeResponse.json();
+    console.log(authCodeJson);
     // saved the encrypted refreshtoken in a session cookie.
     const encryptedRefreshToken = Encryption.encrypt(authCodeJson.refresh_token);
     req.session.user = { encryptedRefreshToken: encryptedRefreshToken, access_token: authCodeJson.access_token };
-    res.redirect('http://localhost:5173/');
+    res.redirect('http://localhost:3000/');
 });
 
 

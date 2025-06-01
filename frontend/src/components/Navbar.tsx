@@ -7,7 +7,7 @@ interface Props {
     user: SpotifyProfile | undefined;
 }
 
-const Navbar = ({ loginSpotify, logoutSpotify, loggedIn, user }: Props) => {
+const Navbar = ({ logoutSpotify, loggedIn, user }: Props) => {
 
     return (
         <div className='flex flex-row items-center justify-between px-12 h-[4.5rem] bg-blue-500 '>
