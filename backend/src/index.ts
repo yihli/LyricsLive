@@ -39,7 +39,9 @@ declare module 'express-session' {
 
 const app = express();
 
-app.use(express.static('dist'));
+if (NODE_ENV === 'PRODUCTION') {
+    app.use(express.static('dist'));
+}
 
 // must allow credentials to match sessions in the front and backend.
 app.use(cors(
@@ -185,7 +187,7 @@ app.get('/callback', async (req: Request<any, any, any, SpotifyCallbackQuery>, r
     // saved the encrypted refreshtoken in a session cookie.
     const encryptedRefreshToken = Encryption.encrypt(authCodeJson.refresh_token);
     req.session.user = { encryptedRefreshToken: encryptedRefreshToken, access_token: authCodeJson.access_token };
-    res.redirect(NODE_ENV === 'PRODUCTION' ? '/' : 'http://localhost:3000/');
+    res.redirect(NODE_ENV === 'PRODUCTION' ? '/' : 'http://localhost:5173/');
 });
 
 
