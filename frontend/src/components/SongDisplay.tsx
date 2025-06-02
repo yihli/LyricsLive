@@ -23,13 +23,16 @@ const SongDisplay = ({ currentlyPlaying, progressTime }: Props) => {
     const songImageUrl: string = currentlyPlaying.data.item.album.images[0].url;
     const songDuration: number = currentlyPlaying.data.item.duration_ms;
     return (
-        <div className='lg:h-full lg:w-[20rem] lg:tracking-tighter lg:border-1 lg:p-3'>
-            <img className='lg:rounded-sm lg:mb-2' src={songImageUrl}></img>
+        <div className='
+            h-[6rem] flex flex-row w-3/4 tracking-tighter gap-3
+            lg:h-full lg:flex-col lg:w-[20rem] tracking-tighter lg:border-1 lg:p-3 lg:gap-none'
+        >
+            <img className='h-[6rem] lg:h-[20rem] lg:rounded-sm lg:mb-2' src={songImageUrl}></img>
             <div className='lg:flex lg:flex-col '>
-                <div className='lg:text-3xl lg:font-bold'>{songName}</div>
-                <div className='lg:text-2xl'>{artistName}</div>
-                <div className='lg:text-2xl'>[{albumName}]</div>
-                <div className='lg:text-2xl'>{prettyMs(progressTime, { colonNotation: true, secondsDecimalDigits: 0 })}/{prettyMs(songDuration, { colonNotation: true, secondsDecimalDigits: 0 })}</div>
+                <div className='text-3xl font-bold'>{songName}</div>
+                <div className='text-2xl'>{artistName}</div>
+                <div className='hidden lg:block lg:text-2xl'>{albumName}</div>
+                <div className='text-2xl'>{prettyMs(progressTime, { colonNotation: true, secondsDecimalDigits: 0 })}/{prettyMs(songDuration, { colonNotation: true, secondsDecimalDigits: 0 })}</div>
             </div>
         </div>
     )

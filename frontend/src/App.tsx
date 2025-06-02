@@ -82,7 +82,10 @@ function App() {
     <div className='h-screen w-screen bg-blue-200 open-sans'>
       <Navbar logoutSpotify={logoutSpotify} loginSpotify={loginSpotify} loggedIn={loggedIn} user={user ? user : undefined}/> 
       {user
-        ?  <div className='lg:h-[calc(100vh-4.5rem)] flex flex-col lg:flex-row lg:gap-12 p-12 lg:items-center'>
+        ?  <div className='
+              h-[calc(100vh-4.5rem)] flex flex-col p-4 gap-4
+              lg:flex-row lg:gap-12 lg:p-12 lg:items-center'
+            >
               <SongDisplay currentlyPlaying={currentlyPlaying} progressTime={progressTime} />
               <LyricsDisplay lyrics={currentSong?.lyrics} currentTimestamp={progressTime} />
             </div> 

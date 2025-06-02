@@ -23,7 +23,7 @@ const Navbar = ({ logoutSpotify, loggedIn, user }: Props) => {
                         h-full flex flex-row items-center text-gray-200 text-[1.25rem] gap-2
                         lg:gap-4 '
                     >
-                        <div>{user.display_name}</div>
+                        <div className='hidden lg:block'>{user.display_name}</div>
                         <img className='h-[3rem] rounded-sm' src={user.images[0].url}></img>
                         <button onClick={logoutSpotify}>logout</button>
                     </div>
