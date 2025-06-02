@@ -1,0 +1,221 @@
+[33mcommit 77bffadab5af79fab827bb3e618c05ed52797df6[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m)[m
+Author: Yihong Li <154848136+yihongli-04@users.noreply.github.com>
+Date:   Mon Jun 2 01:07:17 2025 -0700
+
+    only serve static files in production
+
+[33mcommit f775eb95991d4d12ee5fefe05bcabfe5887c97a6[m[33m ([m[1;31morigin/main[m[33m)[m
+Author: Yihong Li <154848136+yihongli-04@users.noreply.github.com>
+Date:   Sun Jun 1 16:33:12 2025 -0700
+
+    testing facebook login
+
+[33mcommit f30598172e9ed7877df442f0c7a31bd5ef3ae2f5[m
+Author: Yihong Li <154848136+yihli@users.noreply.github.com>
+Date:   Sun Jun 1 15:32:07 2025 -0700
+
+    Create README.md
+
+[33mcommit 529034f183aa47d8742345f8cfc6820c0a09bc6e[m
+Author: Yihong Li <154848136+yihongli-04@users.noreply.github.com>
+Date:   Sun Jun 1 15:06:59 2025 -0700
+
+    add trust proxy for render to access cookies
+
+[33mcommit 8cb10679588f393abee17088a8c265c4a0b25420[m
+Author: Yihong Li <154848136+yihongli-04@users.noreply.github.com>
+Date:   Sun Jun 1 15:00:51 2025 -0700
+
+    fix spotify auth url mistake
+
+[33mcommit 256da2dbca4d0923ed4e8bd524e7a5ebf046b181[m
+Author: Yihong Li <154848136+yihongli-04@users.noreply.github.com>
+Date:   Sun Jun 1 14:52:48 2025 -0700
+
+    hopefully render works.
+
+[33mcommit 603d1f1b1ed6bfa1e0be2fc3cff877e7bdffa382[m
+Author: Yihong Li <154848136+yihongli-04@users.noreply.github.com>
+Date:   Sun Jun 1 14:41:38 2025 -0700
+
+    update a new login endpoint
+
+[33mcommit ba210ce726363cae115b3236bb7544dd429b83fc[m
+Author: Yihong Li <154848136+yihongli-04@users.noreply.github.com>
+Date:   Sun Jun 1 14:23:46 2025 -0700
+
+    production env setup test
+
+[33mcommit b75e70fd3a5d739add1c4ed788418a1513bcee99[m
+Author: Yihong Li <154848136+yihongli-04@users.noreply.github.com>
+Date:   Sun Jun 1 14:00:00 2025 -0700
+
+    change the frontend service urls to local ones
+
+[33mcommit f625ced4c112ad4d7de1fcf8a6c83c50d49519d9[m
+Author: Yihong Li <154848136+yihongli-04@users.noreply.github.com>
+Date:   Sun Jun 1 13:42:36 2025 -0700
+
+    make the backend serve the frontend static packages
+
+[33mcommit 4e15e72a3e295075290ebbc00fb20853255e8239[m
+Author: Yihong Li <154848136+yihongli-04@users.noreply.github.com>
+Date:   Sun Jun 1 13:09:08 2025 -0700
+
+    add signature
+
+[33mcommit 42892a1f1e3362de2349343181ae811f623358e8[m
+Author: Yihong Li <154848136+yihongli-04@users.noreply.github.com>
+Date:   Sun Jun 1 12:39:55 2025 -0700
+
+    add features list
+
+[33mcommit be99b304356077f40934a7636dc67bb223646159[m
+Author: Yihong Li <154848136+yihongli-04@users.noreply.github.com>
+Date:   Sun Jun 1 12:14:53 2025 -0700
+
+    add main body card
+
+[33mcommit 0b01c76233ddef268b989ee39ea765a66ba67cf0[m
+Author: Yihong Li <154848136+yihongli-04@users.noreply.github.com>
+Date:   Sun Jun 1 02:09:18 2025 -0700
+
+    style changes
+
+[33mcommit 6a6a27fe9b6d4fbc40679878b5890d4fcb63c41b[m
+Author: Yihong Li <154848136+yihongli-04@users.noreply.github.com>
+Date:   Sun Jun 1 01:52:12 2025 -0700
+
+    style changes
+
+[33mcommit 0f5283b3077d9e989a571e301cb5c4f34ea9f6df[m
+Author: Yihong Li <154848136+yihongli-04@users.noreply.github.com>
+Date:   Sun Jun 1 01:36:32 2025 -0700
+
+    fix bug where nonplaying song leads to no display
+
+[33mcommit bd1c28a170d8ce98f394fc5a7bb00bc34db69bd1[m
+Author: Yihong Li <154848136+yihongli-04@users.noreply.github.com>
+Date:   Sat May 31 19:08:23 2025 -0700
+
+    style improvements
+
+[33mcommit c2e985d812f14fa3c7f2a3e501e477b76fac94c7[m
+Author: Yihong Li <154848136+yihongli-04@users.noreply.github.com>
+Date:   Sat May 31 14:59:55 2025 -0700
+
+    add basic styling, lyrics now jump to correct line that is being played
+
+[33mcommit eb12898c2da4b3f318ee7ca716984681f87c1bba[m
+Author: Yihong Li <154848136+yihongli-04@users.noreply.github.com>
+Date:   Sat May 31 14:30:31 2025 -0700
+
+    Set up tailwindcss
+
+[33mcommit 3ad04fcb8c7cc6d4dcd84dde2e0e92a361906f45[m
+Author: Yihong Li <154848136+yihongli-04@users.noreply.github.com>
+Date:   Sat May 31 14:25:47 2025 -0700
+
+    create separate component for displaying song details
+
+[33mcommit 654edab916bebd6ff85e12b8de93c34e5eab85cf[m
+Author: Yihong Li <154848136+yihongli-04@users.noreply.github.com>
+Date:   Sat May 31 14:04:16 2025 -0700
+
+    create separate component for displaying lyrics
+
+[33mcommit eee042b0f4464b4112a4af11b37150decc03ecfe[m
+Author: Yihong Li <154848136+yihongli-04@users.noreply.github.com>
+Date:   Sat May 31 13:55:43 2025 -0700
+
+    frontend: move types into separate file and update imports
+
+[33mcommit b7c3399952ad57244e98c7108a024b6888029050[m
+Author: Yihong Li <154848136+yihongli-04@users.noreply.github.com>
+Date:   Sat May 31 13:54:35 2025 -0700
+
+    backend: move types into separate file and update imports
+
+[33mcommit 0886149a9a817ee4139d87267b3fd382bb70488f[m
+Author: Yihong Li <154848136+yihongli-04@users.noreply.github.com>
+Date:   Sat May 31 12:32:21 2025 -0700
+
+    update encryption key and store in env
+
+[33mcommit 11a0f583ecbb27c76e1eddea3f7ec551c02fa001[m
+Author: Yihong Li <154848136+yihongli-04@users.noreply.github.com>
+Date:   Sat May 31 12:26:17 2025 -0700
+
+    add types for App.tsx
+
+[33mcommit e84d355bb8f2e5fd3f5461426442bf27154d070c[m
+Author: Yihong Li <154848136+yihongli-04@users.noreply.github.com>
+Date:   Sat May 31 11:59:11 2025 -0700
+
+    add types for state except currentsong
+
+[33mcommit d26cca0fced6a7c11bf5b1718e9de49a0638e320[m
+Author: Yihong Li <154848136+yihongli-04@users.noreply.github.com>
+Date:   Sat May 31 11:50:58 2025 -0700
+
+    remove console.log from App.tsx
+
+[33mcommit b5afc5db3392e7008793b1134984d1b1d20f4060[m
+Author: Yihong Li <154848136+yihongli-04@users.noreply.github.com>
+Date:   Sat May 31 11:26:33 2025 -0700
+
+    add types for /callback
+
+[33mcommit 32622d6badcf6b61fe4d131dcec80bd80acd634f[m
+Author: Yihong Li <154848136+yihongli-04@users.noreply.github.com>
+Date:   Sat May 31 11:23:11 2025 -0700
+
+    add types for /api/me
+
+[33mcommit f2dd53ea8e61f04ed768e2b0c9f70e50edc45bbf[m
+Author: Yihong Li <154848136+yihongli-04@users.noreply.github.com>
+Date:   Sat May 31 11:15:00 2025 -0700
+
+    added types for /api/getlyrics/
+
+[33mcommit ca95cb28475bc7153de5878b34e7d746a108a4b3[m
+Author: Yihong Li <154848136+yihongli-04@users.noreply.github.com>
+Date:   Sat May 31 11:01:27 2025 -0700
+
+    remove console.log from utils.ts
+
+[33mcommit f25753f2dc44151c930f6a687287f87c6a5b61ca[m
+Author: Yihong Li <154848136+yihongli-04@users.noreply.github.com>
+Date:   Sat May 31 10:59:33 2025 -0700
+
+    update type and validation for /api/getlyrics
+
+[33mcommit 8982b9bff243a8e872cb1a39ca9abda8990b2cf3[m
+Author: Yihong Li <154848136+yihongli-04@users.noreply.github.com>
+Date:   Sat May 31 10:48:05 2025 -0700
+
+    add Request and Response types to all routes
+
+[33mcommit 7a3c8cd3081f94da19a82b721aeb721faab61974[m
+Author: Yihong Li <154848136+yihongli-04@users.noreply.github.com>
+Date:   Sat May 31 10:37:17 2025 -0700
+
+    remove console.log from index.ts
+
+[33mcommit a3daaeb0534bc3c25a1d9f9e965c183e7c3408a1[m
+Author: Yihong Li <154848136+yihongli-04@users.noreply.github.com>
+Date:   Fri May 30 17:57:32 2025 -0700
+
+    fully functional now.
+
+[33mcommit b247c628667bc34addaefe30ec90eb19075001cc[m
+Author: Yihong Li <154848136+yihongli-04@users.noreply.github.com>
+Date:   Fri May 30 13:54:55 2025 -0700
+
+    begin getlyrics endpoint
+
+[33mcommit d09167c9974f718980d2a37664b5d8a41ece64de[m
+Author: Yihong Li <154848136+yihongli-04@users.noreply.github.com>
+Date:   Thu May 29 22:01:03 2025 -0700
+
+    initial commit

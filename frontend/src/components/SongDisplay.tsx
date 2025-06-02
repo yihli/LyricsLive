@@ -9,13 +9,13 @@ interface Props {
 
 const SongDisplay = ({ currentlyPlaying, progressTime }: Props) => {
     if (currentlyPlaying.isLoading) {
-        return <div className='h-full w-[20rem] tracking-tighter'>Searching for song...</div>
+        return <div className='lg:h-full lg:w-[20rem] lg:tracking-tighter'>Searching for song...</div>
     } else if (currentlyPlaying.error) {
-        return <div className='h-full w-[20rem] tracking-tighter'>Error detecting song.</div>
+        return <div className='lg:h-full lg:w-[20rem] lg:tracking-tighter'>Error detecting song.</div>
     } else if (!currentlyPlaying.data) {
-        return <div className='h-full w-[20rem] tracking-tighter'>Error detecting song.</div>
+        return <div className='lg:h-full lg:w-[20rem] lg:tracking-tighter'>Error detecting song.</div>
     } else if (currentlyPlaying.data.isPlaying === false) {
-        return <div className='h-full w-[20rem] tracking-tighter'>No song detected. Hop on spotify already!</div>
+        return <div className='lg:h-full lg:w-[20rem] lg:tracking-tighter'>No song detected. Hop on spotify already!</div>
     }
     const artistName: string = currentlyPlaying.data.item.album.artists[0].name;
     const albumName: string = currentlyPlaying.data.item.album.name;
@@ -23,13 +23,13 @@ const SongDisplay = ({ currentlyPlaying, progressTime }: Props) => {
     const songImageUrl: string = currentlyPlaying.data.item.album.images[0].url;
     const songDuration: number = currentlyPlaying.data.item.duration_ms;
     return (
-        <div className='h-full w-[20rem] tracking-tighter border-1 p-3'>
-            <img className='rounded-sm mb-2' src={songImageUrl}></img>
-            <div className='flex flex-col '>
-                <div className='text-3xl font-bold'>{songName}</div>
-                <div className='text-2xl'>{artistName}</div>
-                <div className='text-2xl'>[{albumName}]</div>
-                <div className='text-2xl'>{prettyMs(progressTime, { colonNotation: true, secondsDecimalDigits: 0 })}/{prettyMs(songDuration, { colonNotation: true, secondsDecimalDigits: 0 })}</div>
+        <div className='lg:h-full lg:w-[20rem] lg:tracking-tighter lg:border-1 lg:p-3'>
+            <img className='lg:rounded-sm lg:mb-2' src={songImageUrl}></img>
+            <div className='lg:flex lg:flex-col '>
+                <div className='lg:text-3xl lg:font-bold'>{songName}</div>
+                <div className='lg:text-2xl'>{artistName}</div>
+                <div className='lg:text-2xl'>[{albumName}]</div>
+                <div className='lg:text-2xl'>{prettyMs(progressTime, { colonNotation: true, secondsDecimalDigits: 0 })}/{prettyMs(songDuration, { colonNotation: true, secondsDecimalDigits: 0 })}</div>
             </div>
         </div>
     )

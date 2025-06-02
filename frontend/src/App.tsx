@@ -82,12 +82,12 @@ function App() {
     <div className='h-screen w-screen bg-blue-200 open-sans'>
       <Navbar logoutSpotify={logoutSpotify} loginSpotify={loginSpotify} loggedIn={loggedIn} user={user ? user : undefined}/> 
       {user
-        ?  <div className='h-[calc(100vh-4.5rem)] flex flex-col md:flex-row md:gap-12 p-12 md:items-center'>
+        ?  <div className='lg:h-[calc(100vh-4.5rem)] flex flex-col lg:flex-row lg:gap-12 p-12 lg:items-center'>
               <SongDisplay currentlyPlaying={currentlyPlaying} progressTime={progressTime} />
               <LyricsDisplay lyrics={currentSong?.lyrics} currentTimestamp={progressTime} />
             </div> 
         
-        : <div className='flex flex-col justify-center items-center gap-10'>
+        : <div className='flex flex-col justify-center items-center lg:gap-10'>
             <MainBodyCard loginSpotify={loginSpotify}/>
             <FeatureList />
           </div>
