@@ -41,6 +41,7 @@ const LyricsDisplay = ({ lyrics, currentTimestamp }: Props) => {
 					<div className={`p-3 bg-gray-200 rounded-2 ${line.id === currentIndex ? 'ml-3 lg:ml-4 text-xl' : 'text-xl'}`} ref={line.id === currentIndex ? currentLineRef : null}>
 						<div className='lg:font-bold'>{line.translated}</div>
 						<div>{line.original}</div>
+						<div className={`${line.romanized ? 'block' : 'hidden'}`}>{line.romanized ? line.romanized : ''}</div>
 					</div>))
 			: <div className='h-full w-full flex justify-center items-center text-4xl'>There are no lyrics. Yet.</div>
 
