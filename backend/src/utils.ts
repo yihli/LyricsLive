@@ -1,4 +1,5 @@
 import { translate } from 'google-translate-api-x';
+const kroman = require('kroman');
 
 
 export const findSyncedLyrics = (lrcList: { syncedLyrics: string }[]) => {
@@ -33,12 +34,19 @@ const extractLine = (text: string): string => {
   return '';
 };
 
+const romanizeLyricsKo = (untranslatedLyricsArray: string[]) => {
+  return untranslatedLyricsArray.map(line => kroman.parse(line));
+}
+
 const getTranslatedLyrics = async (lyricsString: string) => {
   let splitLyrics = lyricsString.split('\n');
   splitLyrics = splitLyrics.map(lyric => extractLine(lyric));
   const stringToTranslate = splitLyrics.join('\n---');
-  let {text} = await translate(stringToTranslate, { to: 'en' });
-  return text.split('\n---');
+  let {text, from} = await translate(stringToTranslate, { to: 'en', autoCorrect: false });
+  if (from.language.iso === 'ko') {
+    return { translatedLyrics: text.split('\n---'), romanizedLyrics: romanizeLyricsKo(splitLyrics) };
+  }
+  return { translatedLyrics: text.split('\n---') };
 };
 
 export const getOriginalAndTranslatedLyrics = async (lyricsString: string) => {
@@ -51,7 +59,8 @@ export const getOriginalAndTranslatedLyrics = async (lyricsString: string) => {
       id: i, 
       time: extractTime(parsed[i]),
       original: extractLine(parsed[i]), 
-      translated: translatedLyrics[i]
+      translated: translatedLyrics.translatedLyrics[i],
+      romanized: translatedLyrics.romanizedLyrics ? translatedLyrics.romanizedLyrics[i] : undefined
     };
   }
 

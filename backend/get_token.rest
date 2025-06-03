@@ -2,6 +2,6 @@ POST http://localhost:3000/api/getlyrics
 Content-Type: application/json
 
 {
-    "trackName": "Lxxk 2 fdgfdU",
-    "artistName": "Yena"
+    "trackName": "Illusion",
+    "artistName": "aespa"
 }
