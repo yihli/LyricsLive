@@ -1,6 +1,6 @@
 import express, { NextFunction, Request, Response } from 'express';
 import session from 'express-session';
-import mongoose from 'mongoose';
+// import mongoose from 'mongoose';
 import cors from 'cors';
 import { z } from 'zod';
 import 'dotenv/config';
@@ -8,11 +8,13 @@ import 'dotenv/config';
 import Encryption from './encryption';
 import { findSyncedLyrics, getOriginalAndTranslatedLyrics } from './utils';
 import type { LyricsRequest, LrcLibResult, TranslatedSyncedLyrics, CurrentSpotifySong, SpotifyProfile, SpotifyCallbackQuery, AuthCodeResponse } from './types';
+
 /*
 TODO:
     - even without synced lyrics, show only the regular lyrics.
 */
-const MONGODB_URI: string = z.string().parse(process.env.MONGODB_URI);
+
+// const MONGODB_URI: string = z.string().parse(process.env.MONGODB_URI);
 const CLIENT_ID: string = z.string().parse(process.env.CLIENT_ID);
 const CLIENT_SECRET: string = z.string().parse(process.env.CLIENT_SECRET);
 const SESSION_KEY: string = z.string().parse(process.env.SESSION_KEY);
@@ -22,13 +24,13 @@ const CALLBACK_URL: string = NODE_ENV === 'PRODUCTION' ? z.string().parse(proces
 
 console.log(NODE_ENV);
 
-mongoose.connect(MONGODB_URI)
-    .then(() => {
-        console.log('MongoDB connected successfully');
-    })
-    .catch((err) => {
-        console.error('MongoDB connection error:', err);
-    });
+// mongoose.connect(MONGODB_URI)
+//     .then(() => {
+//         console.log('MongoDB connected successfully');
+//     })
+//     .catch((err) => {
+//         console.error('MongoDB connection error:', err);
+//     });
 
 // Extend express-session types to include 'user' property
 declare module 'express-session' {
@@ -130,7 +132,6 @@ app.get('/api/currentlyplaying', async (req: Request, res: Response) => {
     });
     try {
         const currentSongJson: CurrentSpotifySong = await currentSongResponse.json();
-        console.log(currentSongJson);
         res.send({ ...currentSongJson, isPlaying: true });
     } catch (e) {
         res.send({ isPlaying: false })
@@ -152,7 +153,6 @@ app.get('/api/me', async (req: Request, res: Response) => {
             'Authorization': 'Bearer ' + accessToken
         }
     });
-    console.log(userDetailsResponse);
     const userDetailsJson: SpotifyProfile = await userDetailsResponse.json();
     res.send(userDetailsJson);
 });
@@ -183,35 +183,37 @@ app.get('/callback', async (req: Request<any, any, any, SpotifyCallbackQuery>, r
     });
 
     const authCodeJson: AuthCodeResponse = await authCodeResponse.json();
-    console.log(authCodeJson);
     // saved the encrypted refreshtoken in a session cookie.
     const encryptedRefreshToken = Encryption.encrypt(authCodeJson.refresh_token);
     req.session.user = { encryptedRefreshToken: encryptedRefreshToken, access_token: authCodeJson.access_token };
     res.redirect(NODE_ENV === 'PRODUCTION' ? '/' : 'http://localhost:5173/');
 });
 
+app.get('/api/error', (_req, _res) =>  {
+    throw new Error('testing access token refresh.')
+})
+
 
 app.use(async (error: any, req: Request, res: Response, _next: NextFunction) => {
+    console.log(error);
     // refresh the access token if we get the access token expired error from /api/currentlyplaying
-    if (error.error?.message === 'The access token expired' && req.session.user?.access_token) {
-        console.log('Access token expired. Refreshing...');
-    
+    if (req.session.user?.encryptedRefreshToken) {    
         const authCodeResponse = await fetch('https://accounts.spotify.com/api/token', {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/x-www-form-urlencoded'
+                'Content-Type': 'application/x-www-form-urlencoded',
+                'Authorization': 'Basic ' + Buffer.from(CLIENT_ID + ':' + CLIENT_SECRET).toString('base64'),
             },
             body: new URLSearchParams({
                 grant_type: 'refresh_token',
-                refresh_token: Encryption.decrypt(req.session.user.encryptedRefreshToken),
-                client_id: CLIENT_ID
+                refresh_token: Encryption.decrypt(req.session.user.encryptedRefreshToken)
             }),
         });
+
         const authCodeJson: AuthCodeResponse = await authCodeResponse.json();
-        req.session.user.access_token =  authCodeJson.access_token;
-        console.log('new access token: ', req.session.user.access_token);
+        req.session.user = { ...req.session.user, access_token: authCodeJson.access_token };
+        console.log('Access token refreshed')
     }
-    console.log(error)
     res.status(500).send({ error });
 });
 
