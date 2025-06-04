@@ -7,7 +7,7 @@ import 'dotenv/config';
 
 import Encryption from './encryption';
 import { findSyncedLyrics, getOriginalAndTranslatedLyrics } from './utils';
-import type { LyricsRequest,LrcLibResult, TranslatedSyncedLyrics, CurrentSpotifySong, SpotifyProfile, SpotifyCallbackQuery, AuthCodeResponse } from './types';
+import type { LyricsRequest, LrcLibResult, TranslatedSyncedLyrics, CurrentSpotifySong, SpotifyProfile, SpotifyCallbackQuery, AuthCodeResponse } from './types';
 /*
 TODO:
     - even without synced lyrics, show only the regular lyrics.
@@ -62,7 +62,7 @@ app.use(session({
     saveUninitialized: false,  // only save sessions if something is stored
     cookie: {
         httpOnly: true,          // prevent client-side JS access
-        secure:  NODE_ENV === 'PRODUCTION' ? true : false,       // set to true in production (requires HTTPS)
+        secure: NODE_ENV === 'PRODUCTION' ? true : false,       // set to true in production (requires HTTPS)
         sameSite: 'strict',      // CSRF protection
         maxAge: 1000 * 60 * 60 * 72  // 3 days
     }
@@ -191,7 +191,26 @@ app.get('/callback', async (req: Request<any, any, any, SpotifyCallbackQuery>, r
 });
 
 
-app.use((error: Error, _req: Request, res: Response, _next: NextFunction) => {
+app.use(async (error: any, req: Request, res: Response, _next: NextFunction) => {
+    // refresh the access token if we get the access token expired error from /api/currentlyplaying
+    if (error.error?.message === 'The access token expired' && req.session.user?.access_token) {
+        console.log('Access token expired. Refreshing...');
+    
+        const authCodeResponse = await fetch('https://accounts.spotify.com/api/token', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: new URLSearchParams({
+                grant_type: 'refresh_token',
+                refresh_token: Encryption.decrypt(req.session.user.encryptedRefreshToken),
+                client_id: CLIENT_ID
+            }),
+        });
+        const authCodeJson: AuthCodeResponse = await authCodeResponse.json();
+        req.session.user.access_token =  authCodeJson.access_token;
+        console.log('new access token: ', req.session.user.access_token);
+    }
     console.log(error)
     res.status(500).send({ error });
 });
