@@ -35,7 +35,7 @@ console.log(NODE_ENV);
 // Extend express-session types to include 'user' property
 declare module 'express-session' {
     interface SessionData {
-        user?: { encryptedRefreshToken: string, access_token: string };
+        user?: { encryptedRefreshToken: string, access_token: string, timeSaved: number };
     }
 }
 
@@ -69,6 +69,34 @@ app.use(session({
         maxAge: 1000 * 60 * 60 * 72  // 3 days
     }
 }));
+
+app.use(async (req: Request, _res: Response, next: NextFunction) => {
+    if (!req.session.user) {
+        return next();
+    }
+    const timeSinceLastToken: number = req.session.user?.timeSaved
+        ? Date.now() - req.session.user?.timeSaved
+        : Number.MAX_SAFE_INTEGER
+    if (timeSinceLastToken > 10 * 3000) {
+        console.log('updating refresh token');
+        const authCodeResponse = await fetch('https://accounts.spotify.com/api/token', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+                'Authorization': 'Basic ' + Buffer.from(CLIENT_ID + ':' + CLIENT_SECRET).toString('base64'),
+            },
+            body: new URLSearchParams({
+                grant_type: 'refresh_token',
+                refresh_token: Encryption.decrypt(req.session.user.encryptedRefreshToken)
+            }),
+        });
+
+        const authCodeJson: AuthCodeResponse = await authCodeResponse.json();
+        req.session.user = { ...req.session.user, access_token: authCodeJson.access_token, timeSaved: Date.now() };
+        console.log('Access token refreshed')
+    }
+    next()
+})
 
 app.get('/api/login', (_req: Request, res: Response) => {
     res.redirect(`https://accounts.spotify.com/authorize?response_type=code&client_id=${CLIENT_ID}&scope=user-read-private%20user-read-email%20user-read-currently-playing&redirect_uri=${CALLBACK_URL}`)
@@ -153,6 +181,7 @@ app.get('/api/me', async (req: Request, res: Response) => {
             'Authorization': 'Bearer ' + accessToken
         }
     });
+
     const userDetailsJson: SpotifyProfile = await userDetailsResponse.json();
     res.send(userDetailsJson);
 });
@@ -185,34 +214,16 @@ app.get('/callback', async (req: Request<any, any, any, SpotifyCallbackQuery>, r
     const authCodeJson: AuthCodeResponse = await authCodeResponse.json();
     // saved the encrypted refreshtoken in a session cookie.
     const encryptedRefreshToken = Encryption.encrypt(authCodeJson.refresh_token);
-    req.session.user = { encryptedRefreshToken: encryptedRefreshToken, access_token: authCodeJson.access_token };
+    req.session.user = { encryptedRefreshToken: encryptedRefreshToken, access_token: authCodeJson.access_token, timeSaved: Date.now() };
     res.redirect(NODE_ENV === 'PRODUCTION' ? '/' : 'http://localhost:5173/');
 });
 
-app.get('/api/error', (_req, _res) =>  {
+app.get('/api/error', (_req, _res) => {
     throw new Error('testing access token refresh.')
 })
 
-app.use(async (error: any, req: Request, res: Response, _next: NextFunction) => {
+app.use(async (error: any, _req: Request, res: Response, _next: NextFunction) => {
     console.log(error);
-    // refresh the access token if we get the access token expired error from /api/currentlyplaying
-    if (req.session.user?.encryptedRefreshToken) {    
-        const authCodeResponse = await fetch('https://accounts.spotify.com/api/token', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded',
-                'Authorization': 'Basic ' + Buffer.from(CLIENT_ID + ':' + CLIENT_SECRET).toString('base64'),
-            },
-            body: new URLSearchParams({
-                grant_type: 'refresh_token',
-                refresh_token: Encryption.decrypt(req.session.user.encryptedRefreshToken)
-            }),
-        });
-
-        const authCodeJson: AuthCodeResponse = await authCodeResponse.json();
-        req.session.user = { ...req.session.user, access_token: authCodeJson.access_token };
-        console.log('Access token refreshed')
-    }
     res.status(500).send({ error });
 });
 

@@ -1,5 +1,9 @@
 import { extractTime } from '../src/utils';
 
+describe('findSyncedLyrics()', ()=> {
+
+});
+
 describe('extractTime()', () => {
     it('should return the correct milliseconds if timestamp exists', () => {
         expect(extractTime('[01:23.45] lyrice line lalalal')).toBe(83450)
