@@ -4,7 +4,7 @@ import { z } from 'zod';
 import type { Request, Response } from 'express';
 import type { LyricsRequest, LrcLibResult, TranslatedSyncedLyrics } from '../types';
 
-import { getOriginalAndTranslatedLyrics, findSyncedLyrics } from '../utils';
+import { getOriginalAndTranslatedLyrics, findSyncedLyrics } from '../utils/lyrics';
 
 
 const router = express.Router();

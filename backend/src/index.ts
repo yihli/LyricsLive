@@ -5,7 +5,7 @@ import cors from 'cors';
 import { z } from 'zod';
 import 'dotenv/config';
 
-import Encryption from './encryption';
+import Encryption from './utils/encryption';
 import type { CurrentSpotifySong, SpotifyProfile, SpotifyCallbackQuery, AuthCodeResponse } from './types';
 import songRouter from './routes/songRouter';
 

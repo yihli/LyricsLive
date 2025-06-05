@@ -1,5 +1,5 @@
 import { translate } from 'google-translate-api-x';
-import { LrcLibResult } from './types';
+import { LrcLibResult } from '../types';
 const kroman = require('kroman');
 
 export const findSyncedLyrics = (lrcList: Array<LrcLibResult>): string => {
