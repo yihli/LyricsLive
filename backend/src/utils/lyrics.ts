@@ -1,5 +1,5 @@
 import { translate } from 'google-translate-api-x';
-import { LrcLibResult } from '../types';
+import { LrcLibResult, TranslatedSyncedLyrics } from '../types';
 const kroman = require('kroman');
 
 export const findSyncedLyrics = (lrcList: Array<LrcLibResult>): string => {
@@ -34,11 +34,11 @@ export const extractLine = (text: string): string => {
   return '';
 };
 
-const romanizeLyricsKo = (untranslatedLyricsArray: string[]) => {
+const romanizeLyricsKo = (untranslatedLyricsArray: string[]): string[] => {
   return untranslatedLyricsArray.map(line => kroman.parse(line));
 }
 
-const getTranslatedLyrics = async (lyricsString: string) => {
+const getTranslatedLyrics = async (lyricsString: string): Promise<{ translatedLyrics: string[], romanizedLyrics?: string[] }> => {
   let splitLyrics = lyricsString.split('\n');
   splitLyrics = splitLyrics.map(lyric => extractLine(lyric));
   const stringToTranslate = splitLyrics.join('\n---');
@@ -49,7 +49,7 @@ const getTranslatedLyrics = async (lyricsString: string) => {
   return { translatedLyrics: text.split('\n---') };
 };
 
-export const getOriginalAndTranslatedLyrics = async (lyricsString: string) => {
+export const getOriginalAndTranslatedLyrics = async (lyricsString: string): Promise<Array<TranslatedSyncedLyrics>> => {
   const parsed = lyricsString.split('\n');
   const translatedLyrics = await getTranslatedLyrics(lyricsString);
 

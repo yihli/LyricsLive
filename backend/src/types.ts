@@ -28,6 +28,7 @@ export interface SyncedLyrics {
 
 export interface TranslatedSyncedLyrics extends SyncedLyrics {
     translated: string;
+    romanized?: string;
 }
 
 export interface SpotifyProfile {
