@@ -193,7 +193,6 @@ app.get('/api/error', (_req, _res) =>  {
     throw new Error('testing access token refresh.')
 })
 
-
 app.use(async (error: any, req: Request, res: Response, _next: NextFunction) => {
     console.log(error);
     // refresh the access token if we get the access token expired error from /api/currentlyplaying

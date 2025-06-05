@@ -1,7 +1,6 @@
 import { translate } from 'google-translate-api-x';
 const kroman = require('kroman');
 
-
 export const findSyncedLyrics = (lrcList: { syncedLyrics: string }[]) => {
   for (let i = 0; i < lrcList.length; i++) {
     if (lrcList[i].syncedLyrics !== null) {
@@ -12,7 +11,7 @@ export const findSyncedLyrics = (lrcList: { syncedLyrics: string }[]) => {
   return lrcList[0].syncedLyrics;
 };
 
-const extractTime = (text: string): number => {
+export const extractTime = (text: string): number => {
   const match = text.match(/\[(\d+):(\d+)\.(\d+)\]/);
   if (!match) {
     throw new Error("Invalid LRC timestamp format");
@@ -25,7 +24,7 @@ const extractTime = (text: string): number => {
   return (minutes * 60 * 1000) + (seconds * 1000) + (hundredths * 10);
 }
 
-const extractLine = (text: string): string => {
+export const extractLine = (text: string): string => {
   const match = text.match(/\](.*)/);
   if (match) {
     return match[1];
