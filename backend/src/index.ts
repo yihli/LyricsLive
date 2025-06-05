@@ -6,8 +6,8 @@ import { z } from 'zod';
 import 'dotenv/config';
 
 import Encryption from './encryption';
-import { findSyncedLyrics, getOriginalAndTranslatedLyrics } from './utils';
-import type { LyricsRequest, LrcLibResult, TranslatedSyncedLyrics, CurrentSpotifySong, SpotifyProfile, SpotifyCallbackQuery, AuthCodeResponse } from './types';
+import type { CurrentSpotifySong, SpotifyProfile, SpotifyCallbackQuery, AuthCodeResponse } from './types';
+import songRouter from './routes/songRouter';
 
 /*
 TODO:
@@ -123,26 +123,7 @@ app.get('/api/isloggedin', async (req: Request, res: Response) => {
     }
 });
 
-app.post('/api/getlyrics', async (req: Request<any, any, LyricsRequest>, res: Response) => {
-    const lrcLibSearchUrl = (trackName: string, artistName: string): string => {
-        return `https://lrclib.net/api/search?track_name=${trackName}&artist_name=${artistName}`;
-    };
-
-    const trackName = z.string().parse(req.body.trackName);
-    const artistName = z.string().parse(req.body.artistName);
-    if (!trackName || !artistName) {
-        throw new Error('Missing track name or artist name.')
-    }
-
-    const currentSongLyrics = await fetch(lrcLibSearchUrl(trackName, artistName), {
-        method: 'GET'
-    });
-    const currentSongLyricsJson: Array<LrcLibResult> = await currentSongLyrics.json();
-
-    const translatedLyrics: Array<TranslatedSyncedLyrics> = await getOriginalAndTranslatedLyrics(findSyncedLyrics(currentSongLyricsJson));
-
-    res.send({ translatedLyrics });
-});
+app.use('/api/songs', songRouter)
 
 app.get('/api/currentlyplaying', async (req: Request, res: Response) => {
     const currentPlayingUrl: string = 'https://api.spotify.com/v1/me/player/currently-playing';
