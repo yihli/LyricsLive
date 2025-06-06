@@ -2,35 +2,22 @@ import express, { NextFunction, Request, Response } from 'express';
 import session from 'express-session';
 // import mongoose from 'mongoose';
 import cors from 'cors';
-import { z } from 'zod';
-import 'dotenv/config';
+
+import songRouter from './routes/songRouter';
+import userRouter from './routes/userRouter';
 
 import Encryption from './utils/encryption';
-import type { CurrentSpotifySong, SpotifyProfile, SpotifyCallbackQuery, AuthCodeResponse } from './types';
-import songRouter from './routes/songRouter';
+
+import { CLIENT_ID, CLIENT_SECRET, SESSION_KEY, PORT, NODE_ENV, CALLBACK_URL } from './utils/env_setup';
+
+import type { SpotifyCallbackQuery, AuthCodeResponse } from './types';
 
 /*
 TODO:
     - even without synced lyrics, show only the regular lyrics.
 */
 
-// const MONGODB_URI: string = z.string().parse(process.env.MONGODB_URI);
-const CLIENT_ID: string = z.string().parse(process.env.CLIENT_ID);
-const CLIENT_SECRET: string = z.string().parse(process.env.CLIENT_SECRET);
-const SESSION_KEY: string = z.string().parse(process.env.SESSION_KEY);
-const PORT: number = Number(z.string().parse(process.env.PORT));
-const NODE_ENV: string = z.string().parse(process.env.NODE_ENV);
-const CALLBACK_URL: string = NODE_ENV === 'PRODUCTION' ? z.string().parse(process.env.PRODUCTION_CALLBACK) : z.string().parse(process.env.DEVELOPMENT_CALLBACK);
-
 console.log(NODE_ENV);
-
-// mongoose.connect(MONGODB_URI)
-//     .then(() => {
-//         console.log('MongoDB connected successfully');
-//     })
-//     .catch((err) => {
-//         console.error('MongoDB connection error:', err);
-//     });
 
 // Extend express-session types to include 'user' property
 declare module 'express-session' {
@@ -98,74 +85,9 @@ app.use(async (req: Request, _res: Response, next: NextFunction) => {
     next()
 })
 
-app.get('/api/login', (_req: Request, res: Response) => {
-    res.redirect(`https://accounts.spotify.com/authorize?response_type=code&client_id=${CLIENT_ID}&scope=user-read-private%20user-read-email%20user-read-currently-playing&redirect_uri=${CALLBACK_URL}`)
-})
+app.use('/api/songs', songRouter);
 
-app.post('/api/logout', (req: Request, res: Response) => {
-    if (!req.session.user) {
-        throw new Error('/api/logout: no session found.')
-    } else {
-        req.session.destroy(() => {
-            console.log('Session destroyed.')
-        })
-        res.status(200).send({ message: 'Successfully logged out' });
-    }
-})
-
-// if a session exists, the user has logged in before and the refresh token exists.
-app.get('/api/isloggedin', async (req: Request, res: Response) => {
-    if (req.session.user) {
-        res.json({ isLoggedIn: true });
-
-    } else {
-        res.json({ isLoggedIn: false })
-    }
-});
-
-app.use('/api/songs', songRouter)
-
-app.get('/api/currentlyplaying', async (req: Request, res: Response) => {
-    const currentPlayingUrl: string = 'https://api.spotify.com/v1/me/player/currently-playing';
-
-    if (!req.session.user) {
-        throw new Error('/api/currentlyplaying: Missing session. Is user logged in?')
-    }
-
-    // get user details 
-    const currentSongResponse = await fetch(currentPlayingUrl, {
-        method: 'GET',
-        headers: {
-            'Authorization': 'Bearer ' + req.session.user.access_token
-        }
-    });
-    try {
-        const currentSongJson: CurrentSpotifySong = await currentSongResponse.json();
-        res.send({ ...currentSongJson, isPlaying: true });
-    } catch (e) {
-        res.send({ isPlaying: false })
-    }
-})
-
-app.get('/api/me', async (req: Request, res: Response) => {
-    const userDetailsUrl: string = 'https://api.spotify.com/v1/me';
-    const accessToken: string = z.string().parse(req.session.user?.access_token);
-
-    if (!accessToken) {
-        throw new Error('/api/me: Missing access token. Is user logged in?')
-    }
-
-    // get user details 
-    const userDetailsResponse = await fetch(userDetailsUrl, {
-        method: 'GET',
-        headers: {
-            'Authorization': 'Bearer ' + accessToken
-        }
-    });
-
-    const userDetailsJson: SpotifyProfile = await userDetailsResponse.json();
-    res.send(userDetailsJson);
-});
+app.use('/api/user', userRouter);
 
 // Spotify returns back here after asking user to allow/deny permissions.
 app.get('/callback', async (req: Request<any, any, any, SpotifyCallbackQuery>, res: Response) => {
