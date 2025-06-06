@@ -77,7 +77,7 @@ app.use(async (req: Request, _res: Response, next: NextFunction) => {
     const timeSinceLastToken: number = req.session.user?.timeSaved
         ? Date.now() - req.session.user?.timeSaved
         : Number.MAX_SAFE_INTEGER
-    if (timeSinceLastToken > 10 * 3000) {
+    if (timeSinceLastToken > 1000 * 60 * 30) {
         console.log('updating refresh token');
         const authCodeResponse = await fetch('https://accounts.spotify.com/api/token', {
             method: 'POST',
