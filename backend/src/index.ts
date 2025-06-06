@@ -12,13 +12,6 @@ import { CLIENT_ID, CLIENT_SECRET, SESSION_KEY, PORT, NODE_ENV, CALLBACK_URL } f
 
 import type { SpotifyCallbackQuery, AuthCodeResponse } from './types';
 
-/*
-TODO:
-    - even without synced lyrics, show only the regular lyrics.
-*/
-
-console.log(NODE_ENV);
-
 // Extend express-session types to include 'user' property
 declare module 'express-session' {
     interface SessionData {
@@ -26,19 +19,19 @@ declare module 'express-session' {
     }
 }
 
+/*
+TODO:
+    - even without synced lyrics, show only the regular lyrics.
+*/
 const app = express();
 
 if (NODE_ENV === 'PRODUCTION') {
     app.use(express.static('dist'));
 }
+console.log(NODE_ENV);
 
 // must allow credentials to match sessions in the front and backend.
-app.use(cors(
-    // {
-    // origin: 'http://localhost:5173',
-    // credentials: true
-    // }
-));
+app.use(cors());
 
 app.use(express.json());
 
