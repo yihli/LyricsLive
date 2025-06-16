@@ -50,6 +50,10 @@ app.use(session({
     }
 }));
 
+app.use('/api/songs', songRouter);
+
+app.use('/api/user', userRouter);
+
 app.use(async (req: Request, _res: Response, next: NextFunction) => {
     if (!req.session.user) {
         return next();
@@ -77,10 +81,6 @@ app.use(async (req: Request, _res: Response, next: NextFunction) => {
     }
     next()
 })
-
-app.use('/api/songs', songRouter);
-
-app.use('/api/user', userRouter);
 
 // Spotify returns back here after asking user to allow/deny permissions.
 app.get('/callback', async (req: Request<any, any, any, SpotifyCallbackQuery>, res: Response) => {
