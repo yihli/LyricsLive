@@ -79,7 +79,7 @@ function App() {
   }
 
   return (
-    <div className='h-screen w-screen site-bg open-sans'>
+    <div className='h-screen w-screen site-bg work-sans'>
       <Navbar logoutSpotify={logoutSpotify} loginSpotify={loginSpotify} loggedIn={loggedIn} user={user ? user : undefined}/> 
       {user
         ?  <div className='
