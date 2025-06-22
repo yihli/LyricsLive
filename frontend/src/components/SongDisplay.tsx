@@ -9,13 +9,13 @@ interface Props {
 
 const SongDisplay = ({ currentlyPlaying, progressTime }: Props) => {
 	if (currentlyPlaying.isLoading) {
-		return <div className='lg:h-full lg:w-[20rem] lg:tracking-tighter'>Searching for song...</div>
+		return <div className='lg:h-full lg:w-[25rem] lg:tracking-tighter song-display-bg'>Searching for song...</div>
 	} else if (currentlyPlaying.error) {
-		return <div className='lg:h-full lg:w-[20rem] lg:tracking-tighter'>Error detecting song.</div>
+		return <div className='lg:h-full lg:w-[25rem] lg:tracking-tighter song-display-bg'>Error detecting song.</div>
 	} else if (!currentlyPlaying.data) {
-		return <div className='lg:h-full lg:w-[20rem] lg:tracking-tighter'>Error detecting song.</div>
+		return <div className='lg:h-full lg:w-[25rem] lg:tracking-tighter song-display-bg'>Error detecting song.</div>
 	} else if (currentlyPlaying.data.isPlaying === false) {
-		return <div className='lg:h-full lg:w-[20rem] lg:tracking-tighter'>No song detected. Hop on spotify already!</div>
+		return <div className='lg:h-full lg:w-[25rem] lg:tracking-tighter song-display-bg'>No song detected. Hop on spotify already!</div>
 	}
 	const artistName: string = currentlyPlaying.data.item.album.artists[0].name;
 	const albumName: string = currentlyPlaying.data.item.album.name;
