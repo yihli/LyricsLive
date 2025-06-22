@@ -28,11 +28,11 @@ const SongDisplay = ({ currentlyPlaying, progressTime }: Props) => {
 			lg:h-full lg:flex-col lg:w-[25rem] lg:items-center tracking-tighter lg:p-[3.5rem] lg:gap-none'
 		>
 			<img className='h-[6rem] lg:h-[18rem] w-[18rem] lg:rounded-sm lg:mb-2' src={songImageUrl}></img>
-			<div className='lg:flex lg:flex-col '>
-				<div className='text-3xl font-bold'>{songName}</div>
-				<div className='text-2xl'>{artistName}</div>
+			<div className='lg:flex lg:flex-col w-full'>
+				<div className='text-2xl font-bold'>{songName}</div>
+				<div className='text-xl'>{artistName}</div>
 				{/* <div className='hidden lg:block lg:text-2xl'>{albumName}</div> */}
-				<div className='text-2xl'>{prettyMs(progressTime, { colonNotation: true, secondsDecimalDigits: 0 })}/{prettyMs(songDuration, { colonNotation: true, secondsDecimalDigits: 0 })}</div>
+				<div className='text-xl'>{prettyMs(progressTime, { colonNotation: true, secondsDecimalDigits: 0 })}/{prettyMs(songDuration, { colonNotation: true, secondsDecimalDigits: 0 })}</div>
 			</div>
 		</div>
 	)
