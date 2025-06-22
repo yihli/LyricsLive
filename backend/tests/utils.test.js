@@ -1,4 +1,4 @@
-import { extractTime } from '../src/utils';
+import { extractTime } from '../src/utils/lyrics';
 
 describe('findSyncedLyrics()', ()=> {
 
