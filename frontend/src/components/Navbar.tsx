@@ -24,7 +24,7 @@ const Navbar = ({ logoutSpotify, loggedIn, user }: Props) => {
                         lg:gap-4 '
                     >
                         <div className='hidden lg:block'>{user.display_name}</div>
-                        <img className='h-[2.5rem] rounded-4xl' src={user.images[0].url}></img>
+                        <img className='h-[2.5rem] rounded-4xl' src={`${user.images[0].url ? user.images[0].url : 'none'}`} alt='pfp'></img>
                         <button onClick={logoutSpotify}>logout</button>
                     </div>
                     : <div></div>
