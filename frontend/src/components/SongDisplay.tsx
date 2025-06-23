@@ -18,7 +18,7 @@ const SongDisplay = ({ currentlyPlaying, progressTime }: Props) => {
 		return <div className='lg:h-full lg:w-[25rem] lg:tracking-tighter song-display-bg'>No song detected. Hop on spotify already!</div>
 	}
 	const artistName: string = currentlyPlaying.data.item.album.artists[0].name;
-	const albumName: string = currentlyPlaying.data.item.album.name;
+	// const albumName: string = currentlyPlaying.data.item.album.name;
 	const songName: string = currentlyPlaying.data.item.name;
 	const songImageUrl: string = currentlyPlaying.data.item.album.images[0].url;
 	const songDuration: number = currentlyPlaying.data.item.duration_ms;

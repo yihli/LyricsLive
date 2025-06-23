@@ -42,8 +42,9 @@ function App() {
   });
 
   useEffect(() => {
-    if (window.VANTA && window.VANTA.BIRDS) {
-      window.VANTA.BIRDS({
+    const window_ref = (window as any);
+    if (window_ref.VANTA && window_ref.VANTA.BIRDS) {
+      window_ref.VANTA.BIRDS({
         el: "#landing-main",
         mouseControls: true,
         touchControls: true,
