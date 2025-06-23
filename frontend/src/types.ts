@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-const SpotifyProfileSchema = z.object({
+export const SpotifyProfileSchema = z.object({
   country: z.string(),
   display_name: z.string(),
   email: z.string(),

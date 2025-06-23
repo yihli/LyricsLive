@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { SpotifyProfileSchema, type SpotifyProfile } from '../types';
 
 const baseUrl = '/api/user/isloggedin';
 
@@ -14,9 +15,9 @@ const isLoggedIn = async (): Promise<boolean> => {
     return false;
 }
 
-const getUserProfile = async () => {
+const getUserProfile = async (): Promise<SpotifyProfile> => {
     const { data }  = await axios.get('/api/user/me', { withCredentials: true });
-    return data;
+    return SpotifyProfileSchema.parse(data);
 }
 
 const getCurrentlyPlaying = async () => {

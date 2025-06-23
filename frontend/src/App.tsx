@@ -82,13 +82,21 @@ function App() {
 
   useEffect(() => {
     const fun = async () => {
-      if (!loggedIn) {
-        const isLoggedIn: boolean = await usersService.isLoggedIn();
-        setLoggedIn(isLoggedIn);
-      } else {
-        const profile: SpotifyProfile = await usersService.getUserProfile();
-        console.log(profile);
-        setUser(profile);
+      try {
+        if (!loggedIn) {
+          const isLoggedIn: boolean = await usersService.isLoggedIn();
+          setLoggedIn(isLoggedIn);
+        } else {
+          const profile: SpotifyProfile = await usersService.getUserProfile();
+          console.log(profile);
+          setUser(profile);
+        }
+      }
+      catch (e) {
+        // temp solution: log user out on error
+        console.log('ran into an error:', e);
+        setLoggedIn(false);
+        setUser(null);
       }
     };
     fun();
