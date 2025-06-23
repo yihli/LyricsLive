@@ -42,6 +42,30 @@ function App() {
   });
 
   useEffect(() => {
+    if (window.VANTA && window.VANTA.BIRDS) {
+      window.VANTA.BIRDS({
+        el: "#landing-main",
+        mouseControls: true,
+        touchControls: true,
+        gyroControls: false,
+        minHeight: 200.00,
+        minWidth: 200.00,
+        scale: 1.00,
+        scaleMobile: 1.00,
+        backgroundColor: 0xf5f3ef,
+        color1: 0x0,
+        color2: 0xff08,
+        colorMode: "lerpGradient",
+        wingSpan: 12.00,
+        speedLimit: 1.00,
+        separation: 58.00,
+        cohesion: 32.00,
+        quantity: 4.00
+      })
+    }
+  }, []);
+
+  useEffect(() => {
     currentlyPlaying.refetch();
   }, [loggedIn]);
 
@@ -79,21 +103,21 @@ function App() {
   }
 
   return (
-    <div className='h-screen w-screen site-bg work-sans'>
-      <Navbar logoutSpotify={logoutSpotify} loginSpotify={loginSpotify} loggedIn={loggedIn} user={user ? user : undefined}/> 
+    <div className='h-screen w-screen site-bg work-sans' id='landing-main'>
+      <Navbar logoutSpotify={logoutSpotify} loginSpotify={loginSpotify} loggedIn={loggedIn} user={user ? user : undefined} />
       {user
-        ?  <div className='
+        ? <div className='
               h-[calc(100vh-4.5rem)] flex flex-col 
               lg:flex-row lg:items-center'
-            >
-              <SongDisplay currentlyPlaying={currentlyPlaying} progressTime={progressTime} />
-              <LyricsDisplay lyrics={currentSong?.lyrics} currentTimestamp={progressTime} />
-            </div> 
-        
+        >
+          <SongDisplay currentlyPlaying={currentlyPlaying} progressTime={progressTime} />
+          <LyricsDisplay lyrics={currentSong?.lyrics} currentTimestamp={progressTime} />
+        </div>
+
         : <div className='flex flex-col justify-center items-center lg:gap-10'>
-            <MainBodyCard loginSpotify={loginSpotify}/>
-            <FeatureList />
-          </div>
+          <MainBodyCard loginSpotify={loginSpotify} />
+          <FeatureList />
+        </div>
       }
       <Signature />
     </div>
