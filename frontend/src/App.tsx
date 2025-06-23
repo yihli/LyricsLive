@@ -22,7 +22,7 @@ function App() {
     queryKey: ['currently-playing'],
     queryFn: async () => {
       if (loggedIn) {
-        const timeOfRequest = Date.now()
+        const timeOfRequest = Date.now();
         const data = await usersService.getCurrentlyPlaying();
         if (currentSong === null || data.item.id !== currentSong.item.id) {
           try {
@@ -62,7 +62,7 @@ function App() {
         separation: 58.00,
         cohesion: 32.00,
         quantity: 4.00
-      })
+      });
     }
   }, []);
 
@@ -83,26 +83,26 @@ function App() {
   useEffect(() => {
     const fun = async () => {
       if (!loggedIn) {
-        const isLoggedIn = await usersService.isLoggedIn();
+        const isLoggedIn: boolean = await usersService.isLoggedIn();
         setLoggedIn(isLoggedIn);
       } else {
-        const profile = await usersService.getUserProfile();
+        const profile: SpotifyProfile = await usersService.getUserProfile();
         console.log(profile);
         setUser(profile);
       }
-    }
+    };
     fun();
   }, [loggedIn]);
 
   const loginSpotify = async () => {
-    await usersService.login()
-  }
+    await usersService.login();
+  };
 
   const logoutSpotify = async () => {
     await usersService.logout();
     setUser(null);
     setLoggedIn(false);
-  }
+  };
 
   return (
     <div className='h-screen w-screen site-bg work-sans' id='landing-main'>
