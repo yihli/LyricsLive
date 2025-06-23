@@ -87,6 +87,7 @@ function App() {
         setLoggedIn(isLoggedIn);
       } else {
         const profile = await usersService.getUserProfile();
+        console.log(profile);
         setUser(profile);
       }
     }
