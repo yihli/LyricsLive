@@ -4,7 +4,7 @@ import session from 'express-session';
 import cors from 'cors';
 
 import songRouter from './routes/songRouter';
-import userRouter from './routes/userRouter';
+import userRouter from './routes/spotifyUserRouter';
 
 import Encryption from './utils/encryption';
 
@@ -53,7 +53,7 @@ app.use(session({
 
 app.use('/api/songs', songRouter);
 
-app.use('/api/user', userRouter);
+app.use('/api/spotify', userRouter);
 
 app.use(async (req: Request, _res: Response, next: NextFunction) => {
     console.log('Checking if access token needs to be refreshed...')

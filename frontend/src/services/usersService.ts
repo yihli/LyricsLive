@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { SpotifyProfileSchema, type SpotifyProfile } from '../types';
 
-const baseUrl = '/api/user/isloggedin';
+const baseUrl = '/api/spotify/isloggedin';
 
 // check if the backend has a session saved. 
 // if so, we can consider the user logged in and get their data.
@@ -16,21 +16,21 @@ const isLoggedIn = async (): Promise<boolean> => {
 }
 
 const getUserProfile = async (): Promise<SpotifyProfile> => {
-    const { data }  = await axios.get('/api/user/me', { withCredentials: true });
+    const { data }  = await axios.get('/api/spotify/me', { withCredentials: true });
     return SpotifyProfileSchema.parse(data);
 }
 
 const getCurrentlyPlaying = async () => {
-    const { data } = await axios.get('/api/user/currentlyplaying', { withCredentials: true });
+    const { data } = await axios.get('/api/spotify/currentlyplaying', { withCredentials: true });
     return data;
 }
 
 const login = async () => {
-    window.location.href = '/api/user/login';
+    window.location.href = '/api/spotify/login';
 }
 
 const logout = async () => {
-    const { data } = await axios.post('/api/user/logout', null, { withCredentials: true });
+    const { data } = await axios.post('/api/spotify/logout', null, { withCredentials: true });
     return data
 }
 
