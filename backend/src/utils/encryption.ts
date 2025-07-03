@@ -1,5 +1,5 @@
 import crypto from 'crypto';
-import 'dotenv/config'
+import 'dotenv/config';
 import { z } from 'zod';
 
 const key = z.string().parse(process.env.CRYPTO_KEY); // Store this securely (e.g. in env)
@@ -20,4 +20,4 @@ const decrypt = (data: string) => {
 
 export default {
     encrypt, decrypt
-}
+};

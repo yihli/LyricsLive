@@ -48,11 +48,11 @@ export interface SpotifyProfile {
     };
     href: string;
     id: string;
-    images: Array<{
+    images: {
         height: number;
         url: string;
         width: number;
-    }>;
+    }[];
     product: string;
     type: string;
     uri: string;
@@ -72,7 +72,7 @@ export interface CurrentSpotifySong {
     item: {
         album: {
             album_type: string;
-            artists: Array<{
+            artists: {
                 external_urls: {
                     spotify: string;
                 };
@@ -81,18 +81,18 @@ export interface CurrentSpotifySong {
                 name: string;
                 type: string;
                 uri: string;
-            }>,
+            }[],
             available_markets: string[],
-            external_urls: Array<{
+            external_urls: {
                 spotify: string;
-            }>,
+            }[],
             href: string;
             id: string;
-            images: Array<{
+            images: {
                 height: number;
                 url: string;
                 width: string;
-            }>,
+            }[],
             name: string;
             release_date: string;
             release_date_precision: string;
@@ -100,7 +100,7 @@ export interface CurrentSpotifySong {
             type: string;
             uri: string;
         },
-        artists: Array<{
+        artists: {
             external_urls: {
                 spotify: string;
             };
@@ -109,7 +109,7 @@ export interface CurrentSpotifySong {
             name: string;
             type: string;
             uri: string;
-        }>,
+        }[],
         available_markets: string[],
         disc_number: number;
         duration_ms: 195520,

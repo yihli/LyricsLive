@@ -2,7 +2,8 @@ import { translate } from 'google-translate-api-x';
 import { LrcLibResult, TranslatedSyncedLyrics } from '../types';
 const kroman = require('kroman');
 
-export const findSyncedLyrics = (lrcList: Array<LrcLibResult>): string => {
+export const findSyncedLyrics = (lrcList: LrcLibResult[]): string => {
+  // eslint-disable-next-line @typescript-eslint/prefer-for-of
   for (let i = 0; i < lrcList.length; i++) {
     if (lrcList[i].syncedLyrics !== null) {
       return lrcList[i].syncedLyrics;
@@ -23,7 +24,7 @@ export const extractTime = (text: string): number => {
   const hundredths = parseInt(match[3], 10);
 
   return (minutes * 60 * 1000) + (seconds * 1000) + (hundredths * 10);
-}
+};
 
 export const extractLine = (text: string): string => {
   const match = text.match(/\](.*)/);
@@ -36,24 +37,24 @@ export const extractLine = (text: string): string => {
 
 const romanizeLyricsKo = (untranslatedLyricsArray: string[]): string[] => {
   return untranslatedLyricsArray.map(line => kroman.parse(line));
-}
+};
 
 const getTranslatedLyrics = async (lyricsString: string): Promise<{ translatedLyrics: string[], romanizedLyrics?: string[] }> => {
   let splitLyrics = lyricsString.split('\n');
   splitLyrics = splitLyrics.map(lyric => extractLine(lyric));
   const stringToTranslate = splitLyrics.join('\n---');
-  let {text, from} = await translate(stringToTranslate, { to: 'en', autoCorrect: false });
+  const {text, from} = await translate(stringToTranslate, { to: 'en', autoCorrect: false });
   if (from.language.iso === 'ko') {
     return { translatedLyrics: text.split('\n---'), romanizedLyrics: romanizeLyricsKo(splitLyrics) };
   }
   return { translatedLyrics: text.split('\n---') };
 };
 
-export const getOriginalAndTranslatedLyrics = async (lyricsString: string): Promise<Array<TranslatedSyncedLyrics>> => {
+export const getOriginalAndTranslatedLyrics = async (lyricsString: string): Promise<TranslatedSyncedLyrics[]> => {
   const parsed = lyricsString.split('\n');
   const translatedLyrics = await getTranslatedLyrics(lyricsString);
 
-  let to_return = [];
+  const to_return = [];
   for (let i = 0; i < parsed.length; i++) {
     to_return[i] = {
       id: i, 

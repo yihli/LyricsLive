@@ -56,14 +56,14 @@ app.use('/api/songs', songRouter);
 app.use('/api/spotify', userRouter);
 
 app.use(async (req: Request, _res: Response, next: NextFunction) => {
-    console.log('Checking if access token needs to be refreshed...')
+    console.log('Checking if access token needs to be refreshed...');
     if (!req.session.user) {
-        console.log('Access token not found, skipping refresh...')
+        console.log('Access token not found, skipping refresh...');
         return next();
     }
     const timeSinceLastToken: number = req.session.user?.timeSaved
         ? Date.now() - req.session.user?.timeSaved
-        : Number.MAX_SAFE_INTEGER
+        : Number.MAX_SAFE_INTEGER;
     if (timeSinceLastToken > 1000 * 60 * 30) {
         console.log('Access token expired, refreshing...');
         const authCodeResponse = await fetch('https://accounts.spotify.com/api/token', {
@@ -80,24 +80,24 @@ app.use(async (req: Request, _res: Response, next: NextFunction) => {
 
         const authCodeJson: AuthCodeResponse = await authCodeResponse.json();
         req.session.user = { ...req.session.user, access_token: authCodeJson.access_token, timeSaved: Date.now() };
-        console.log('Access token refreshed,')
+        console.log('Access token refreshed,');
     }
-    next()
-})
+    next();
+});
 
 // Spotify returns back here after asking user to allow/deny permissions.
-app.get('/callback', async (req: Request<any, any, any, SpotifyCallbackQuery>, res: Response) => {
-    console.log('Spotify returned to the callback function...')
+app.get('/callback', async (req: Request<object, object, object, SpotifyCallbackQuery>, res: Response) => {
+    console.log('Spotify returned to the callback function...');
     // after user logs in, receive an authentication code
     const query: SpotifyCallbackQuery = req.query;
 
-    console.log('Checking for error or missing code...')
+    console.log('Checking for error or missing code...');
     if (query.error || !query.code) {
-        console.log('Missing code or encountered error.')
+        console.log('Missing code or encountered error.');
         res.send('Error/missing code.');
     }
 
-    console.log('Using code to get access and refresh token...')
+    console.log('Using code to get access and refresh token...');
     // use the authentication code to get an access token and refresh token
     const params = new URLSearchParams({
         code: query.code,
@@ -116,19 +116,19 @@ app.get('/callback', async (req: Request<any, any, any, SpotifyCallbackQuery>, r
 
     const authCodeJson: AuthCodeResponse = await authCodeResponse.json();
 
-    console.log('Got access token, and refresh token...')
+    console.log('Got access token, and refresh token...');
     // saved the encrypted refreshtoken in a session cookie.
     const encryptedRefreshToken = Encryption.encrypt(authCodeJson.refresh_token);
     req.session.user = { encryptedRefreshToken: encryptedRefreshToken, access_token: authCodeJson.access_token, timeSaved: Date.now() };
-    console.log('Saved tokens as sessions. Redirecting...')
+    console.log('Saved tokens as sessions. Redirecting...');
     res.redirect(NODE_ENV === 'PRODUCTION' ? '/' : 'http://localhost:5173/');
 });
 
 app.get('/api/error', (_req, _res) => {
-    throw new Error('testing access token refresh.')
-})
+    throw new Error('testing access token refresh.');
+});
 
-app.use(async (error: any, _req: Request, res: Response, _next: NextFunction) => {
+app.use(async (error: unknown, _req: Request, res: Response, _next: NextFunction) => {
     console.log(error);
     res.status(500).send({ error });
 });
