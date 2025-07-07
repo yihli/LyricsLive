@@ -1,22 +1,9 @@
 import app from './app';
+import discordBot from './discord/bot';
 
-import { PORT } from './utils/env_setup';
+import { DISCORD_TOKEN, PORT } from './utils/env_setup';
 
-// REDIS
-
-import { createClient } from 'redis';
-
-const client = createClient({
-    url: 'redis://redis:6379'
-});
-
-client.on('error', err => console.log('Redis Client Error', err));
-
-client.connect().then(() => {
-    console.log('Connected to redis');
-});
-
-// REDIS
+discordBot.login(DISCORD_TOKEN);
 
 app.listen(PORT, () => {
     console.log(`Listening on port ${PORT}`);

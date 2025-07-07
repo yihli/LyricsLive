@@ -3,14 +3,12 @@ services:
     build: 
       context: .
       dockerfile: Dockerfile
-    depends_on:
-      - redis
     ports:
     - "3000:3000"
 
-  redis:
-    image: redis:7-alpine
-    container_name: lyricslive-redis
-    ports:
-      - "6379:6379"
-    command: ["redis-server", "--save", "", "--appendonly", "no"]
+  # redis:
+  #   image: redis:7-alpine
+  #   container_name: lyricslive-redis
+  #   ports:
+  #     - "6379:6379"
+  #   command: ["redis-server", "--save", "", "--appendonly", "no"]
