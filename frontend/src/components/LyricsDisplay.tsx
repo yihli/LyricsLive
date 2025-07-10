@@ -42,7 +42,8 @@ const LyricsDisplay = ({ lyrics, currentTimestamp }: Props) => {
 							<div className='lg:font-bold'>{line.translated}</div>
 							<div>{line.original}</div>
 							<div className={`${line.romanized ? 'block' : 'hidden'}`}>{line.romanized ? line.romanized : ''}</div>
-						</div>))
+						</div>
+					))
 					: <div className='h-full w-full flex justify-center items-center text-4xl'>There are no lyrics. Yet.</div>
 
 				}

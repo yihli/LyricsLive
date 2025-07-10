@@ -12,7 +12,8 @@ import MainBodyCard from './components/MainBodyCard';
 import FeatureList from './components/FeatureList';
 import Signature from './components/Signature';
 
-function App() {
+
+const App = () => {
   const [loggedIn, setLoggedIn] = useState<boolean>(false);
   const [user, setUser] = useState<SpotifyProfile | null>(null);
   const [progressTime, setProgressTime] = useState<number>(0);
@@ -66,10 +67,12 @@ function App() {
     }
   }, []);
 
+  // on first login, fetch immediately
   useEffect(() => {
     currentlyPlaying.refetch();
   }, [loggedIn]);
 
+  // update progress time
   useEffect(() => {
     if (progressTime) {
       const interval = setInterval(() => {
@@ -80,6 +83,7 @@ function App() {
     }
   }, [progressTime]);
 
+  // see if user logged in before
   useEffect(() => {
     const fun = async () => {
       try {

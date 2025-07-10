@@ -11,6 +11,7 @@ const Navbar = ({ logoutSpotify, loggedIn, user }: Props) => {
     if (!user) {
         return <div>no user found.</div>;
     }
+    
     return (
         <div className='
             flex flex-row items-center justify-between navbar-bg h-[4.5rem] px-4
