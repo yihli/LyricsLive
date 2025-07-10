@@ -25,5 +25,5 @@ describe('startup', () => {
         });
 
         expect(success).toBe(true);
-    })
-})
+    });
+});
