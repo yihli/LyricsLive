@@ -6,7 +6,8 @@
   "scripts": {
     "test": "jest",
     "start": "NODE_ENV=PRODUCTION ts-node src/index.ts",
-    "dev": "NODE_ENV=DEVELOPMENT ts-node-dev src/index.ts"
+    "dev": "NODE_ENV=DEVELOPMENT ts-node-dev src/index.ts",
+    "lint": "npx eslint ."
   },
   "jest": {
     "transform": {
