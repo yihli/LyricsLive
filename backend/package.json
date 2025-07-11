@@ -30,7 +30,7 @@
     "google-translate-api-x": "^10.7.2",
     "http-proxy-agent": "^7.0.2",
     "kroman": "^1.0.1",
-    "mongoose": "^8.15.1",
+    "mongoose": "^8.16.3",
     "redis": "^5.5.6",
     "ts-node-dev": "^2.0.0",
     "zod": "^3.25.39"
@@ -42,6 +42,7 @@
     "@eslint/js": "^9.27.0",
     "@types/express": "^5.0.2",
     "@types/jest": "^30.0.0",
+    "@types/mongoose": "^5.11.97",
     "babel-jest": "^30.0.0-beta.3",
     "eslint": "^9.27.0",
     "eslint-config-love": "^121.0.0",

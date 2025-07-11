@@ -1,6 +1,6 @@
 import express, { NextFunction, Request, Response } from 'express';
 import session from 'express-session';
-// import mongoose from 'mongoose';
+import mongoose from 'mongoose';
 import cors from 'cors';
 
 import songRouter from './routes/songRouter';
@@ -8,7 +8,7 @@ import userRouter from './routes/spotifyUserRouter';
 
 import Encryption from './utils/encryption';
 
-import { CLIENT_ID, CLIENT_SECRET, SESSION_KEY, NODE_ENV, CALLBACK_URL } from './utils/env_setup';
+import env from './utils/env_setup';
 
 import type { SpotifyCallbackQuery, AuthCodeResponse } from './types';
 
@@ -19,17 +19,17 @@ declare module 'express-session' {
     }
 }
 
-/*
-TODO:
-    - even without synced lyrics, show only the regular lyrics.
-*/
+mongoose.connect(env.MONGODB_URI)
+    .then(() => {
+        console.log('Connected to MongoDB.');
+    })
 
 const app = express();
 
-if (NODE_ENV === 'PRODUCTION') {
+if (env.NODE_ENV === 'PRODUCTION') {
     app.use(express.static('dist'));
 }
-console.log(NODE_ENV);
+console.log(env.NODE_ENV);
 
 // must allow credentials to match sessions in the front and backend.
 app.use(cors());
@@ -40,12 +40,12 @@ app.set('trust proxy', 1);
 
 // Session middleware
 app.use(session({
-    secret: SESSION_KEY,
+    secret: env.SESSION_KEY,
     resave: false,             // don't save session if unmodified
     saveUninitialized: false,  // only save sessions if something is stored
     cookie: {
         httpOnly: true,          // prevent client-side JS access
-        secure: NODE_ENV === 'PRODUCTION' ? true : false,       // set to true in production (requires HTTPS)
+        secure: env.NODE_ENV === 'PRODUCTION' ? true : false,       // set to true in production (requires HTTPS)
         sameSite: 'strict',      // CSRF protection
         maxAge: 1000 * 60 * 60 * 72  // 3 days
     }
@@ -70,7 +70,7 @@ app.use(async (req: Request, _res: Response, next: NextFunction) => {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',
-                'Authorization': 'Basic ' + Buffer.from(CLIENT_ID + ':' + CLIENT_SECRET).toString('base64'),
+                'Authorization': 'Basic ' + Buffer.from(env.CLIENT_ID + ':' + env.CLIENT_SECRET).toString('base64'),
             },
             body: new URLSearchParams({
                 grant_type: 'refresh_token',
@@ -101,7 +101,7 @@ app.get('/callback', async (req: Request<object, object, object, SpotifyCallback
     // use the authentication code to get an access token and refresh token
     const params = new URLSearchParams({
         code: query.code,
-        redirect_uri: CALLBACK_URL,
+        redirect_uri: env.CALLBACK_URL,
         grant_type: 'authorization_code',
     });
 
@@ -109,7 +109,7 @@ app.get('/callback', async (req: Request<object, object, object, SpotifyCallback
         method: 'POST',
         headers: {
             'Content-Type': 'application/x-www-form-urlencoded',
-            'Authorization': 'Basic ' + Buffer.from(CLIENT_ID + ':' + CLIENT_SECRET).toString('base64'),
+            'Authorization': 'Basic ' + Buffer.from(env.CLIENT_ID + ':' + env.CLIENT_SECRET).toString('base64'),
         },
         body: params.toString(),
     });
@@ -121,7 +121,7 @@ app.get('/callback', async (req: Request<object, object, object, SpotifyCallback
     const encryptedRefreshToken = Encryption.encrypt(authCodeJson.refresh_token);
     req.session.user = { encryptedRefreshToken: encryptedRefreshToken, access_token: authCodeJson.access_token, timeSaved: Date.now() };
     console.log('Saved tokens as sessions. Redirecting...');
-    res.redirect(NODE_ENV === 'PRODUCTION' ? '/' : 'http://localhost:5173/');
+    res.redirect(env.NODE_ENV === 'PRODUCTION' ? '/' : 'http://localhost:5173/');
 });
 
 app.get('/api/error', (_req, _res) => {

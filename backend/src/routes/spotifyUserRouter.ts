@@ -1,14 +1,14 @@
 import express,{ Request, Response } from 'express';
 import { z } from 'zod';
 
-import { CLIENT_ID, CALLBACK_URL } from '../utils/env_setup';
+import env from '../utils/env_setup';
 
 import type { CurrentSpotifySong, SpotifyProfile } from '../types';
 const router = express.Router();
 
 router.get('/login', (_req: Request, res: Response) => {
     console.log('Redirecting user to login through spotify...');
-    res.redirect(`https://accounts.spotify.com/authorize?response_type=code&client_id=${CLIENT_ID}&scope=user-read-private%20user-read-email%20user-read-currently-playing&redirect_uri=${CALLBACK_URL}`);
+    res.redirect(`https://accounts.spotify.com/authorize?response_type=code&client_id=${env.CLIENT_ID}&scope=user-read-private%20user-read-email%20user-read-currently-playing&redirect_uri=${env.CALLBACK_URL}`);
 });
 
 router.post('/logout', (req: Request, res: Response) => {
