@@ -23,7 +23,6 @@ router.post('/getlyrics', async (req: Request<object, unknown, LyricsRequest>, r
 
     const trackName = z.string().parse(req.body.trackName);
     const artistName = z.string().parse(req.body.artistName);
-
     const currentSongLyrics = await fetch(lrcLibSearchUrl(trackName, artistName), {
         method: 'GET'
     });

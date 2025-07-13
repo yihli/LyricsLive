@@ -14,11 +14,16 @@ const accountSchema = new Schema({
     },
     hashedPassword: {
         type: String,
-        require: true
+        required: true
     }
 });
 
 // InferSchemaType generates TS type from mongoose schema
-export type Account = InferSchemaType<typeof accountSchema>;
+export interface UserAccount {
+    email: string;
+    username: string;
+    hashedPassword: string;
+    _id: string;
+};
 
-export default model<Account>('Account', accountSchema);
+export default model<UserAccount>('Account', accountSchema);

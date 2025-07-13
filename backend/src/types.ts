@@ -146,3 +146,17 @@ export interface AuthCodeResponse {
     refresh_token: string;
     scope: string;
 }
+
+export interface Account {
+    username: string;
+    email: string;
+}
+
+export interface NewAccountDetails extends Account {
+    password: string;
+}
+
+export interface LoginObject {
+    username: string;
+    password: string;
+}

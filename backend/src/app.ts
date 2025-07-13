@@ -5,6 +5,7 @@ import cors from 'cors';
 
 import songRouter from './routes/songRouter';
 import userRouter from './routes/spotifyUserRouter';
+import accountRouter from './routes/accountRouter'
 
 import Encryption from './utils/encryption';
 
@@ -22,7 +23,7 @@ declare module 'express-session' {
 mongoose.connect(env.MONGODB_URI)
     .then(() => {
         console.log('Connected to MongoDB.');
-    })
+    });
 
 const app = express();
 
@@ -54,6 +55,9 @@ app.use(session({
 app.use('/api/songs', songRouter);
 
 app.use('/api/spotify', userRouter);
+
+app.use('/api/accounts', accountRouter);
+
 
 app.use(async (req: Request, _res: Response, next: NextFunction) => {
     console.log('Checking if access token needs to be refreshed...');

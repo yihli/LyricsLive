@@ -10,6 +10,7 @@ let CALLBACK_URL: string = '';
 let REDIS_URL: string = '';
 let DISCORD_TOKEN: string = '';
 let MONGODB_URI: string = '';
+let JWT_SECRET = '';
 
 try {
     CLIENT_ID = z.string().parse(process.env.CLIENT_ID);
@@ -21,6 +22,7 @@ try {
     REDIS_URL = z.string().parse(process.env.REDIS_URL);
     DISCORD_TOKEN = z.string().parse(process.env.DISCORD_TOKEN);
     MONGODB_URI = z.string().parse(process.env.MONGODB_URI);
+    JWT_SECRET = z.string().parse(process.env.JWT_SECRET);
 } catch {
     console.log('zod error');
 }
@@ -34,5 +36,6 @@ export default {
     CALLBACK_URL,
     REDIS_URL,
     DISCORD_TOKEN,
-    MONGODB_URI
-}
+    MONGODB_URI,
+    JWT_SECRET
+};
