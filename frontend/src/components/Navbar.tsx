@@ -8,9 +8,9 @@ interface Props {
 }
 
 const Navbar = ({ logoutSpotify, loggedIn, user }: Props) => {
-    if (!user) {
-        return <div>no user found.</div>;
-    }
+    // if (!user) {
+    //     return <div>no user found.</div>;
+    // }
     
     return (
         <div className='

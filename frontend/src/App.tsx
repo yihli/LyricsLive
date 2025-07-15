@@ -11,6 +11,7 @@ import Navbar from './components/Navbar';
 import MainBodyCard from './components/MainBodyCard';
 import FeatureList from './components/FeatureList';
 import Signature from './components/Signature';
+import AccountForm from './components/AccountForm';
 
 
 const App = () => {
@@ -128,9 +129,10 @@ const App = () => {
           <LyricsDisplay lyrics={currentSong?.lyrics} currentTimestamp={progressTime} />
         </div>
 
-        : <div className='flex flex-col justify-center items-center lg:gap-10'>
-          <MainBodyCard loginSpotify={loginSpotify} />
-          <FeatureList />
+        : <div className='h-[calc(100vh-4.5rem)] flex flex-col justify-center items-center lg:gap-10'>
+          {/* <MainBodyCard loginSpotify={loginSpotify} />
+          <FeatureList /> */}
+          <AccountForm loginSpotify={loginSpotify} />
         </div>
       }
       <Signature />
