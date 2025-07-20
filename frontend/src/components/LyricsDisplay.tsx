@@ -30,16 +30,18 @@ const LyricsDisplay = ({ lyrics, currentTimestamp }: Props) => {
 
 
 	return (
-		<div className='h-full flex-1 p-[3rem]'> 
+		<div className='
+		h-full overflow-y-hidden
+		lg:h-full lg:flex-1 lg:p-[3rem]'> 
 			<div className={`
-				h-full flex-1 overflow-hidden ${lyrics ? 'bg-green-400' : 'lyricline-bg'} rounded-sm tracking-tighter mb-8 border
+				h-full flex-1 overflow-hidden ${lyrics ? 'bg-green-400' : 'lyricline-bg'} rounded-sm tracking-tighter lg:mb-8 lg:border
 				lg:mb-0`}
 			>
 				{lyrics
 					? lyrics.map(line =>
 					(
-						<div className={`p-3 lyricline-bg rounded-2 ${line.id === currentIndex ? 'ml-3 lg:ml-4 text-xl' : 'text-xl'}`} ref={line.id === currentIndex ? currentLineRef : null}>
-							<div className='lg:font-bold'>{line.translated}</div>
+						<div className={`p-3 lyricline-bg rounded-2 ${line.id === currentIndex ? 'ml-3 lg:ml-4 lg:text-xl' : 'lg:text-xl'}`} ref={line.id === currentIndex ? currentLineRef : null}>
+							<div className='font-bold'>{line.translated}</div>
 							<div>{line.original}</div>
 							<div className={`${line.romanized ? 'block' : 'hidden'}`}>{line.romanized ? line.romanized : ''}</div>
 						</div>

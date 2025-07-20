@@ -10,24 +10,24 @@ const LoginForm = (loginSpotify: () => void, setCurrentForm: (str: string) => vo
 	return (
 		<div className="inputandsigninmethods 
 				w-full h-full flex flex-col gap-3 p-[2rem]
-				lg:w-full lg:h-full lg:flex lg:flex-col lg:gap-3">
+				lg:w-full lg:h-full lg:flex lg:flex-col lg:gap-3 lg:p-0">
 			<div className="w-full text-center text-2xl lg:w-full lg:text-left lg:text-3xl">Log In</div>
 			<div className="w-full lg:w-full">
 				<div className="lg:w-full lg:text-[0.75rem]">Email</div>
-				<input className="w-full h-[3rem] lg:w-full bg-white" />
+				<input className="w-full h-[3rem] lg:w-full lg:h-auto  bg-white" />
 			</div>
 			<div className="w-full lg:w-full">
 				<div className="lg:w-full lg:text-[0.75rem]">Password</div>
-				<input className="w-full h-[3rem] lg:w-full bg-white" />
+				<input className="w-full h-[3rem] lg:w-full lg:h-auto  bg-white" />
 				<div className="lg:w-full lg:text-right lg:text-[0.75rem]">Forgot password?</div>
 				<div className="submit+switchregisterform
 							flex flex-col items-center justify-center gap-3
-							lg:flex lg:flex-row lg:items-center lg:h-[1.75rem] lg:lg:gap-3
+							lg:flex lg:flex-row lg:items-center lg:justify-start lg:h-[1.75rem] lg:lg:gap-3
 						">
 					<button className="loginbutton
 							bg-green-200
 							w-full h-[3rem] rounded-md mt-[1rem]
-							lg:w-[5rem] lg:h-full lg:rounded-md">Login</button>
+							lg:w-[5rem] lg:h-full lg:rounded-md lg:mt-0">Login</button>
 					<div className="lg:text-[0.75rem]">New user? <a onClick={() => setCurrentForm('register')}>Sign up</a></div>
 				</div>
 				<div className="othersigninmethods

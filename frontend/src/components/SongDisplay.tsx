@@ -24,15 +24,18 @@ const SongDisplay = ({ currentlyPlaying, progressTime }: Props) => {
 	const songDuration: number = currentlyPlaying.data.item.duration_ms;
 	return (
 		<div className='
-			h-[6rem] flex flex-row w-[7rem] tracking-tighter gap-3 song-display-bg
-			lg:h-full lg:flex-col lg:w-[25rem] lg:items-center tracking-tighter lg:p-[3.5rem] lg:gap-none'
+			song-display-bg
+			flex flex-row h-[7.5rem] gap-2 items-center
+			lg:flex lg:h-full lg:flex-col lg:w-[25rem] lg:items-center tracking-tighter lg:p-[3.5rem] lg:gap-none'
 		>
-			<img className='h-[6rem] lg:h-[18rem] w-[18rem] lg:rounded-sm lg:mb-2' src={songImageUrl}></img>
-			<div className='lg:flex lg:flex-col w-full'>
-				<div className='text-2xl font-bold'>{songName}</div>
-				<div className='text-xl'>{artistName}</div>
-				{/* <div className='hidden lg:block lg:text-2xl'>{albumName}</div> */}
-				<div className='text-xl'>{prettyMs(progressTime, { colonNotation: true, secondsDecimalDigits: 0 })}/{prettyMs(songDuration, { colonNotation: true, secondsDecimalDigits: 0 })}</div>
+			<img className='
+				h-full w-auto
+				lg:h-[18rem] lg:w-[18rem] lg:rounded-sm lg:mb-2' src={songImageUrl}></img>
+			<div className='flex-1 lg:flex lg:flex-col lg:w-full'>
+				<div className='lg:text-2xl font-bold'>{songName}</div>
+				<div className='lg:text-xl'>{artistName}</div>
+
+				<div className='lg:text-xl'>{prettyMs(progressTime, { colonNotation: true, secondsDecimalDigits: 0 })}/{prettyMs(songDuration, { colonNotation: true, secondsDecimalDigits: 0 })}</div>
 			</div>
 		</div>
 	)
