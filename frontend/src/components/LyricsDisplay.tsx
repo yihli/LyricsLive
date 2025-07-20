@@ -32,7 +32,7 @@ const LyricsDisplay = ({ lyrics, currentTimestamp }: Props) => {
 	return (
 		<div className='h-full flex-1 p-[3rem]'> 
 			<div className={`
-				h-full flex-1 overflow-hidden ${lyrics ? 'bg-green-400' : 'lyricline-bg'} rounded-sm tracking-tighter mb-8 
+				h-full flex-1 overflow-hidden ${lyrics ? 'bg-green-400' : 'lyricline-bg'} rounded-sm tracking-tighter mb-8 border
 				lg:mb-0`}
 			>
 				{lyrics

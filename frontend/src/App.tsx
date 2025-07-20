@@ -129,7 +129,9 @@ const App = () => {
           <LyricsDisplay lyrics={currentSong?.lyrics} currentTimestamp={progressTime} />
         </div>
 
-        : <div className='h-[calc(100vh-4.5rem)] flex flex-col justify-center items-center lg:gap-10'>
+        : <div className='
+          h-[calc(100vh-4.5rem)] 
+          lg:flex lg:flex-col lg:justify-center lg:items-center lg:gap-10'>
           {/* <MainBodyCard loginSpotify={loginSpotify} />
           <FeatureList /> */}
           <AccountForm loginSpotify={loginSpotify} />
