@@ -8,8 +8,6 @@ import type { SpotifyProfile, CurrentSpotifySong } from './types';
 import LyricsDisplay from './components/LyricsDisplay';
 import SongDisplay from './components/SongDisplay';
 import Navbar from './components/Navbar';
-import MainBodyCard from './components/MainBodyCard';
-import FeatureList from './components/FeatureList';
 import Signature from './components/Signature';
 import AccountForm from './components/AccountForm';
 

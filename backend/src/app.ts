@@ -2,6 +2,7 @@ import express, { NextFunction, Request, Response } from 'express';
 import session from 'express-session';
 import mongoose from 'mongoose';
 import cors from 'cors';
+import jwt, { JsonWebTokenError } from 'jsonwebtoken';
 
 import songRouter from './routes/songRouter';
 import userRouter from './routes/spotifyUserRouter';
@@ -13,7 +14,13 @@ import env from './utils/env_setup';
 
 import type { SpotifyCallbackQuery, AuthCodeResponse } from './types';
 
-// Extend express-session types to include 'user' property
+
+declare module 'express-serve-static-core' {
+    interface Request {
+        token?: string;
+    }
+}
+
 declare module 'express-session' {
     interface SessionData {
         user?: { encryptedRefreshToken: string, access_token: string, timeSaved: number };
@@ -51,6 +58,24 @@ app.use(session({
         maxAge: 1000 * 60 * 60 * 72  // 3 days
     }
 }));
+
+app.use(async (req, res, next) => {
+    const auth: string | undefined = req.get('Authorization');
+    console.log('auth in the middleware is:', auth);
+    if (auth && auth.startsWith('Bearer ')) {
+        const tokenString = auth.replace('Bearer ', '');
+        console.log('token in the middleware is:', tokenString)
+        const token = await jwt.verify(tokenString, env.JWT_SECRET);
+
+        if (!token) {
+            res.status(401).send({ error: 'the token is invalid' });
+            return;
+        }
+
+        req.token = token;
+    } 
+    next();
+});
 
 app.use('/api/songs', songRouter);
 
@@ -134,6 +159,9 @@ app.get('/api/error', (_req, _res) => {
 
 app.use(async (error: unknown, _req: Request, res: Response, _next: NextFunction) => {
     console.log(error);
+    if (error instanceof JsonWebTokenError) {
+        res.status(401).send({ error: 'the token is invalid' });
+    }
     res.status(500).send({ error });
 });
 

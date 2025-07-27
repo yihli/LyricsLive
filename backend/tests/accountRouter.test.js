@@ -1,4 +1,4 @@
-import { describe, it, test, expect, beforeEach, afterAll } from '@jest/globals';
+import { describe, it, test, expect, beforeEach, afterAll, beforeAll } from '@jest/globals';
 import app from '../src/app';
 import supertest from 'supertest';
 import bcrypt from 'bcrypt';
@@ -156,5 +156,139 @@ describe('logging in', () => {
 
         expect(response1.body).toHaveProperty('error', 'account with the username does not exist');
         expect(response2.body).toHaveProperty('error', 'password is incorrect');
+    });
+});
+
+describe('updating users', () => {
+    let testAccount = undefined;
+    let token = '';
+
+    beforeEach(async () => {
+        await Account.deleteMany({});
+        await api
+            .post('/api/accounts/register')
+            .send({
+                username: 'user',
+                password: 'yeah',
+                email: 'hello@gmail.com'
+            });
+        testAccount = await Account.findOne({ username: 'user' });
+
+        const response = await api
+            .post('/api/accounts/login')
+            .send({
+                username: 'user',
+                password: 'yeah',
+            });
+        console.log('accountRouter.test: updating users: beforeEach: login response:', response.body);
+        token = response.body.token;
+    });
+
+    it('returns 400 if missing token', async () => {
+        const response = await api
+            .put(`/api/accounts/${testAccount._id}`)
+            .send({
+                username: 'user',
+                password: 'yeah12',
+                email: 'hello@gmail.com'
+            })
+            .expect(400);
+
+        expect(response.body.error).toBe('the token is missing');
+    });
+
+    it('returns 401 if invalid token', async () => {
+        console.log('token for 401 is', token)
+        const response = await api
+            .put(`/api/accounts/${testAccount._id}`)
+            .set('Authorization', 'Bearer hello')
+            .send({
+                username: 'user',
+                password: 'yeah12',
+                email: 'hello@gmail.com'
+            })
+            .expect(401);
+
+        expect(response.body.error).toBe('the token is invalid');
+    });
+
+    describe('returns 200 and updated account details on individual fields changes', () => {
+        const updateAccountCases = [
+            [
+                {
+                    username: 'hello1'
+                },
+                {
+                    username: 'hello1',
+                    email: 'hello@gmail.com'
+                }
+            ],
+            [
+                {
+                    email: 'abcdef@gmail.com'
+                },
+                {
+                    username: 'user',
+                    email: 'abcdef@gmail.com'
+                }
+            ],
+            [
+                {
+                    discordUserId: '1234'
+                },
+                {
+                    username: 'user',
+                    email: 'hello@gmail.com',
+                    discordUserId: '1234'
+                }
+            ],
+            [
+                {
+                },
+                {
+                    username: 'user',
+                    email: 'hello@gmail.com'
+                }
+            ],
+
+        ];
+
+        it.each(updateAccountCases)("%o -> %o", async (input, expected) => {
+            const response = await api
+                .put(`/api/accounts/${testAccount._id}`)
+                .set('Authorization', 'Bearer ' + token)
+                .send(input)
+                .expect(200);
+
+            expect(response.body).toStrictEqual(expected);
+        });
+    });
+
+    it('after updating password, new password recieves 200 and old password receives 400', async () => {
+        const response = await api
+            .put(`/api/accounts/${testAccount._id}`)
+            .set('Authorization', 'Bearer ' + token)
+            .send({
+                password: 'omg so cool',
+            })
+            .expect(200);
+
+        await api
+            .post('/api/accounts/login')
+            .send({
+                username: 'user',
+                password: 'omg so cool'
+            })
+            .expect(200);
+
+        const wrongLoginResponse = await api
+            .post('/api/accounts/login')
+            .send({
+                username: 'user',
+                password: 'yeah'
+            })
+            .expect(400);
+
+        expect(wrongLoginResponse.body.error).toBe('password is incorrect');
     });
 });

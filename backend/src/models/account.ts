@@ -15,6 +15,9 @@ const accountSchema = new Schema({
     hashedPassword: {
         type: String,
         required: true
+    },
+    discordUserId: {
+        type: String
     }
 });
 
@@ -24,6 +27,10 @@ export interface UserAccount {
     username: string;
     hashedPassword: string;
     _id: string;
+    discordUserId: string;
 };
+
+export type PublicUserAccount = Omit<UserAccount, 'hashedPassword' | '_id'>;
+export type UpdateUserAccount = Omit<UserAccount, '_id'>;
 
 export default model<UserAccount>('Account', accountSchema);

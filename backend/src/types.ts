@@ -156,7 +156,18 @@ export interface NewAccountDetails extends Account {
     password: string;
 }
 
+export interface UpdateAccountDetails extends NewAccountDetails {
+    discordId: string;
+}
+
 export interface LoginObject {
     username: string;
     password: string;
+}
+
+export interface AccountJwtPayload {
+    username: string;
+    sub: string;
+    iat: number;
+    exp: number;
 }

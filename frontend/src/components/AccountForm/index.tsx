@@ -90,7 +90,7 @@ const RegisterForm = (setCurrentForm: (str: string) => void) => {
 
 const AccountForm = ({ loginSpotify }: Props) => {
 	const [currentForm, setCurrentForm] = useState<string>('login');
-	const forms: Object<string> = {
+	const forms: Record<string, React.ReactNode> = {
 		'login': LoginForm(loginSpotify, setCurrentForm),
 		'register': RegisterForm(setCurrentForm)
 	}
