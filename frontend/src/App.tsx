@@ -1,5 +1,9 @@
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
+import { Route, Routes } from 'react-router';
 import { useQuery } from '@tanstack/react-query';
+
+import { UserContext } from './contexts/UserContext';
+
 import usersService from './services/usersService';
 import lyricsService from './services/lyricsService';
 
@@ -10,12 +14,32 @@ import SongDisplay from './components/SongDisplay';
 import Navbar from './components/Navbar';
 import Signature from './components/Signature';
 import AccountForm from './components/AccountForm';
+import Settings from './pages/Settings';
 
 const App = () => {
-  const [loggedIn, setLoggedIn] = useState<boolean>(false);
   const [user, setUser] = useState<SpotifyProfile | null>(null);
+
+  return (
+    <div>
+      <UserContext.Provider value={{ user, setUser }}>
+        <Routes>
+          <Route index element={<CurrentHomepage />} />
+          <Route path='settings' element={<Settings />} />
+        </Routes>
+      </UserContext.Provider>
+    </div>
+  );
+}
+
+export default App;
+
+const CurrentHomepage = () => {
+  const [loggedIn, setLoggedIn] = useState<boolean>(false);
   const [progressTime, setProgressTime] = useState<number>(0);
   const [currentSong, setCurrentSong] = useState<CurrentSpotifySong | null>(null);
+
+  // const [user, setUser] = useState<SpotifyProfile | null>(null);
+  const userContext = useContext(UserContext);
 
   const currentlyPlaying = useQuery({
     queryKey: ['currently-playing'],
@@ -91,14 +115,14 @@ const App = () => {
         } else {
           const profile: SpotifyProfile = await usersService.getUserProfile();
           console.log(profile);
-          setUser(profile);
+          userContext.setUser(profile);
         }
       }
       catch (e) {
         // temp solution: log user out on error
         console.log('ran into an error:', e);
         setLoggedIn(false);
-        setUser(null);
+        userContext.setUser(null);
       }
     };
     fun();
@@ -110,14 +134,13 @@ const App = () => {
 
   const logoutSpotify = async () => {
     await usersService.logout();
-    setUser(null);
+    userContext.setUser(null);
     setLoggedIn(false);
   };
-
   return (
     <div className='h-screen w-screen site-bg work-sans' id='landing-main'>
-      <Navbar logoutSpotify={logoutSpotify} loginSpotify={loginSpotify} loggedIn={loggedIn} user={user ? user : undefined} />
-      {user
+      <Navbar logoutSpotify={logoutSpotify} loginSpotify={loginSpotify} loggedIn={loggedIn} user={userContext.user ? userContext.user : undefined} />
+      {userContext.user
         ? <div className='
               h-[calc(100vh-4.5rem)] flex flex-col 
               lg:flex-row lg:items-center'
@@ -138,5 +161,3 @@ const App = () => {
     </div>
   );
 }
-
-export default App;

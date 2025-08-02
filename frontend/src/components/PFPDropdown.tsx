@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import { createPortal } from "react-dom";
+import { Link } from 'react-router';
 
 interface Props {
     pfpUrl: string;
@@ -40,8 +41,8 @@ const PfpDropdown = ({ pfpUrl, logoutSpotify }: Props) => {
                 <div 
                     className="z-[99] bg-green-300 flex flex-col" 
                     style={{ top: `${coords.top}px`, left: `${coords.left}px`, position: 'absolute', width: `calc(100vw - ${coords.left}px)` }}>
-                    <div className="p-2 border-1">Settings</div>
-                    <div className="p-2 border-1" onClick={() => logoutSpotify()}>Logout</div>
+                    <Link to="settings" className="p-2 outline-1">Settings</Link>
+                    <div className="p-2 outline-1" onClick={() => logoutSpotify()}>Logout</div>
                 </div>
             ,document.body)}
 
