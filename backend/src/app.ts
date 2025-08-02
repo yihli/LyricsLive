@@ -2,7 +2,7 @@ import express, { NextFunction, Request, Response } from 'express';
 import session from 'express-session';
 import mongoose from 'mongoose';
 import cors from 'cors';
-import jwt, { JsonWebTokenError } from 'jsonwebtoken';
+import jwt, { JsonWebTokenError, JwtPayload } from 'jsonwebtoken';
 
 import songRouter from './routes/songRouter';
 import userRouter from './routes/spotifyUserRouter';
@@ -12,12 +12,13 @@ import Encryption from './utils/encryption';
 
 import env from './utils/env_setup';
 
-import type { SpotifyCallbackQuery, AuthCodeResponse } from './types';
+import type { SpotifyCallbackQuery, AuthCodeResponse, AccountJwtPayload } from './types';
 
-
-declare module 'express-serve-static-core' {
-    interface Request {
-        token?: string;
+declare global {
+    namespace Express {
+        interface Request {
+            token?: string | JwtPayload;
+        }
     }
 }
 
