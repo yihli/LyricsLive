@@ -1,7 +1,7 @@
 import express from 'express';
 import bcrypt from 'bcrypt';
 import Account, { UserAccount, PublicUserAccount, UpdateUserAccount } from '../models/account';
-import { AccountJwtPayload, LoginObject, NewAccountDetails, UpdateAccountDetails } from '../types';
+import {  LoginObject, NewAccountDetails, UpdateAccountDetails } from '../types';
 import mongoose from 'mongoose';
 import jwt from 'jsonwebtoken';
 import env from '../utils/env_setup';
@@ -79,8 +79,8 @@ router.post('/login', async (req, res) => {
 
 // to update account details
 // requires auth 
-router.put('/:id', async (req, res, next) => {
-    const token: AccountJwtPayload | undefined = req.token;
+router.put('/:id', async (req: any, res, next) => {
+    const token = req.token;
     const body: Partial<UpdateAccountDetails> = req.body;
 
     if (!token) {

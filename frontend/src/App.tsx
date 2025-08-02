@@ -11,7 +11,6 @@ import Navbar from './components/Navbar';
 import Signature from './components/Signature';
 import AccountForm from './components/AccountForm';
 
-
 const App = () => {
   const [loggedIn, setLoggedIn] = useState<boolean>(false);
   const [user, setUser] = useState<SpotifyProfile | null>(null);

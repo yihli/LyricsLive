@@ -25,7 +25,7 @@ const SongDisplay = ({ currentlyPlaying, progressTime }: Props) => {
 	return (
 		<div className='
 			song-display-bg
-			flex flex-row h-[7.5rem] gap-2 items-center
+			flex flex-row h-[7.5rem] gap-2 items-center z-1
 			lg:flex lg:h-full lg:flex-col lg:w-[25rem] lg:items-center tracking-tighter lg:p-[3.5rem] lg:gap-none'
 		>
 			<img className='

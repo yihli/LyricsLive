@@ -12,7 +12,7 @@ import Encryption from './utils/encryption';
 
 import env from './utils/env_setup';
 
-import type { SpotifyCallbackQuery, AuthCodeResponse, AccountJwtPayload } from './types';
+import type { SpotifyCallbackQuery, AuthCodeResponse } from './types';
 
 declare global {
     namespace Express {
