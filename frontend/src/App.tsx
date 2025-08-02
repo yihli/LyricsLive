@@ -2,8 +2,6 @@ import { useContext, useEffect, useState } from 'react';
 import { Route, Routes } from 'react-router';
 import { useQuery } from '@tanstack/react-query';
 
-import { SpotifyUserContext } from './contexts/SpotifyUserContext';
-
 import usersService from './services/usersService';
 import lyricsService from './services/lyricsService';
 
@@ -15,18 +13,17 @@ import Navbar from './components/Navbar';
 import Signature from './components/Signature';
 import AccountForm from './components/AccountForm';
 import Settings from './pages/Settings';
+import { SpotifyUserContextProvider, SpotifyUserContext, useSpotifyUser } from './contexts/SpotifyUserContext.tsx';
 
 const App = () => {
-  const [user, setUser] = useState<SpotifyProfile | null>(null);
-
   return (
     <div>
-      <SpotifyUserContext.Provider value={{ user, setUser }}>
+      <SpotifyUserContextProvider>
         <Routes>
           <Route index element={<CurrentHomepage />} />
           <Route path='settings' element={<Settings />} />
         </Routes>
-      </SpotifyUserContext.Provider>
+      </SpotifyUserContextProvider>
     </div>
   );
 }
@@ -34,17 +31,31 @@ const App = () => {
 export default App;
 
 const CurrentHomepage = () => {
-  const [loggedIn, setLoggedIn] = useState<boolean>(false);
+  // const [loggedIn, setLoggedIn] = useState<boolean>(false);
   const [progressTime, setProgressTime] = useState<number>(0);
   const [currentSong, setCurrentSong] = useState<CurrentSpotifySong | null>(null);
 
   // const [user, setUser] = useState<SpotifyProfile | null>(null);
-  const userContext = useContext(SpotifyUserContext);
+  const userContext = useSpotifyUser();
+
+  useEffect(() => {
+    const fun = async () => {
+      try {
+        const profile: SpotifyProfile = await usersService.getUserProfile();
+        console.log(profile);
+        userContext.setUser(profile);
+      }
+      catch {
+        console.log('login unsuccessful.')
+      }
+    }
+    fun();
+  }, [])
 
   const currentlyPlaying = useQuery({
     queryKey: ['currently-playing'],
     queryFn: async () => {
-      if (loggedIn) {
+      if (userContext.user) {
         const timeOfRequest = Date.now();
         const data = await usersService.getCurrentlyPlaying();
         if (currentSong === null || data.item.id !== currentSong.item.id) {
@@ -89,10 +100,10 @@ const CurrentHomepage = () => {
     }
   }, []);
 
-  // on first login, fetch immediately
-  useEffect(() => {
-    currentlyPlaying.refetch();
-  }, [loggedIn]);
+  // // on first login, fetch immediately
+  // useEffect(() => {
+  //   currentlyPlaying.refetch();
+  // }, [loggedIn]);
 
   // update progress time
   useEffect(() => {
@@ -106,40 +117,32 @@ const CurrentHomepage = () => {
   }, [progressTime]);
 
   // see if user logged in before
-  useEffect(() => {
-    const fun = async () => {
-      try {
-        if (!loggedIn) {
-          const isLoggedIn: boolean = await usersService.isLoggedIn();
-          setLoggedIn(isLoggedIn);
-        } else {
-          const profile: SpotifyProfile = await usersService.getUserProfile();
-          console.log(profile);
-          userContext.setUser(profile);
-        }
-      }
-      catch (e) {
-        // temp solution: log user out on error
-        console.log('ran into an error:', e);
-        setLoggedIn(false);
-        userContext.setUser(null);
-      }
-    };
-    fun();
-  }, [loggedIn]);
+  // useEffect(() => {
+  //   const fun = async () => {
+  //     try {
+  //       if (!loggedIn) {
+  //         const isLoggedIn: boolean = await usersService.isLoggedIn();
+  //         setLoggedIn(isLoggedIn);
+  //       } else {
+  //         const profile: SpotifyProfile = await usersService.getUserProfile();
+  //         console.log(profile);
+  //         userContext.setUser(profile);
+  //       }
+  //     }
+  //     catch (e) {
+  //       // temp solution: log user out on error
+  //       console.log('ran into an error:', e);
+  //       setLoggedIn(false);
+  //       userContext.setUser(null);
+  //     }
+  //   };
+  //   fun();
+  // }, [loggedIn]);
 
-  const loginSpotify = async () => {
-    await usersService.login();
-  };
 
-  const logoutSpotify = async () => {
-    await usersService.logout();
-    userContext.setUser(null);
-    setLoggedIn(false);
-  };
   return (
     <div className='h-screen w-screen site-bg work-sans' id='landing-main'>
-      <Navbar logoutSpotify={logoutSpotify} loginSpotify={loginSpotify} loggedIn={loggedIn} user={userContext.user ? userContext.user : undefined} />
+      <Navbar />
       {userContext.user
         ? <div className='
               h-[calc(100vh-4.5rem)] flex flex-col 
@@ -154,7 +157,7 @@ const CurrentHomepage = () => {
           lg:flex lg:flex-col lg:justify-center lg:items-center lg:gap-10'>
           {/* <MainBodyCard loginSpotify={loginSpotify} />
           <FeatureList /> */}
-          <AccountForm loginSpotify={loginSpotify} />
+          <AccountForm />
         </div>
       }
       <Signature />

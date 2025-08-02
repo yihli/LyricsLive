@@ -1,12 +1,14 @@
 import spotifyLogo from '../../assets/spotify-logo.png';
 import ateezDance from '../../assets/ateez-dance.gif';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
+import { SpotifyUserContext } from '../../contexts/SpotifyUserContext';
 
 interface Props {
 	loginSpotify: () => void
 }
 
 const LoginForm = (loginSpotify: () => void, setCurrentForm: (str: string) => void) => {
+	const spotifyUserContext = useContext(SpotifyUserContext);
 	return (
 		<div className="inputandsigninmethods 
 				w-full h-full flex flex-col gap-3 p-[2rem]
@@ -41,7 +43,7 @@ const LoginForm = (loginSpotify: () => void, setCurrentForm: (str: string) => vo
 						<button className="spotifybutton
 							w-full rounded-md h-full text-sm bg-black flex flex-row items-center justify-center gap-1 text-white
 									lg:w-[5rem] lg:rounded-md lg:h-full lg:text-sm lg:bg-black lg:flex lg:flex-row lg:items-center lg:justify-center lg:gap-1 lg:text-white "
-							onClick={loginSpotify}>
+							onClick={() => spotifyUserContext.login()}>
 							<img className="w-auto h-3/5 lg:w-auto lg:h-3/5" src={spotifyLogo} />
 							spotify</button>
 					</div>
