@@ -2,7 +2,7 @@ import { useContext, useEffect, useState } from 'react';
 import { Route, Routes } from 'react-router';
 import { useQuery } from '@tanstack/react-query';
 
-import { UserContext } from './contexts/UserContext';
+import { SpotifyUserContext } from './contexts/SpotifyUserContext';
 
 import usersService from './services/usersService';
 import lyricsService from './services/lyricsService';
@@ -21,12 +21,12 @@ const App = () => {
 
   return (
     <div>
-      <UserContext.Provider value={{ user, setUser }}>
+      <SpotifyUserContext.Provider value={{ user, setUser }}>
         <Routes>
           <Route index element={<CurrentHomepage />} />
           <Route path='settings' element={<Settings />} />
         </Routes>
-      </UserContext.Provider>
+      </SpotifyUserContext.Provider>
     </div>
   );
 }
@@ -39,7 +39,7 @@ const CurrentHomepage = () => {
   const [currentSong, setCurrentSong] = useState<CurrentSpotifySong | null>(null);
 
   // const [user, setUser] = useState<SpotifyProfile | null>(null);
-  const userContext = useContext(UserContext);
+  const userContext = useContext(SpotifyUserContext);
 
   const currentlyPlaying = useQuery({
     queryKey: ['currently-playing'],
