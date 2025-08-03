@@ -99,12 +99,7 @@ const CurrentHomepage = () => {
       });
     }
   }, []);
-
-  // // on first login, fetch immediately
-  // useEffect(() => {
-  //   currentlyPlaying.refetch();
-  // }, [loggedIn]);
-
+  
   // update progress time
   useEffect(() => {
     if (progressTime) {
@@ -115,30 +110,6 @@ const CurrentHomepage = () => {
       return () => clearInterval(interval); // cleanup
     }
   }, [progressTime]);
-
-  // see if user logged in before
-  // useEffect(() => {
-  //   const fun = async () => {
-  //     try {
-  //       if (!loggedIn) {
-  //         const isLoggedIn: boolean = await usersService.isLoggedIn();
-  //         setLoggedIn(isLoggedIn);
-  //       } else {
-  //         const profile: SpotifyProfile = await usersService.getUserProfile();
-  //         console.log(profile);
-  //         userContext.setUser(profile);
-  //       }
-  //     }
-  //     catch (e) {
-  //       // temp solution: log user out on error
-  //       console.log('ran into an error:', e);
-  //       setLoggedIn(false);
-  //       userContext.setUser(null);
-  //     }
-  //   };
-  //   fun();
-  // }, [loggedIn]);
-
 
   return (
     <div className='h-screen w-screen site-bg work-sans' id='landing-main'>

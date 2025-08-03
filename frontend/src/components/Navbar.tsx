@@ -1,19 +1,11 @@
 import PfpDropdown from "./PFPDropdown.tsx";
-import type { SpotifyProfile } from "../types";
 import { useSpotifyUser } from "../contexts/SpotifyUserContext.tsx";
 
-interface Props {
-    loginSpotify: () => void;
-    logoutSpotify: () => void;
-    loggedIn: boolean;
-    user: SpotifyProfile | undefined;
-}
-
-const Navbar = ({ logoutSpotify, loggedIn, user }: Props) => {
+const Navbar = () => {
     const spotifyUserContext = useSpotifyUser();
-    if (!spotifyUserContext.user) {
-        return <div>no user found.</div>;
-    }
+    // if (!spotifyUserContext.user) {
+    //     return <div>no user found.</div>;
+    // }
 
     return (
         <div className='
@@ -30,7 +22,7 @@ const Navbar = ({ logoutSpotify, loggedIn, user }: Props) => {
                         lg:gap-4 '
                     >
                         <div className='hidden lg:block'>{spotifyUserContext.user.display_name}</div>
-                        <PfpDropdown pfpUrl={`${spotifyUserContext.user.images[0].url ? spotifyUserContext.user.images[0].url : 'none'}`} logoutSpotify={logoutSpotify} />
+                        <PfpDropdown pfpUrl={`${spotifyUserContext.user.images[0].url ? spotifyUserContext.user.images[0].url : 'none'}`} logoutSpotify={spotifyUserContext.logout} />
                         {/* <button onClick={logoutSpotify}>logout</button> */}
                     </div>
                     : <div></div>

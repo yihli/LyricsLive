@@ -3,11 +3,8 @@ import ateezDance from '../../assets/ateez-dance.gif';
 import { useContext, useState } from 'react';
 import { SpotifyUserContext } from '../../contexts/SpotifyUserContext';
 
-interface Props {
-	loginSpotify: () => void
-}
 
-const LoginForm = (loginSpotify: () => void, setCurrentForm: (str: string) => void) => {
+const LoginForm = (setCurrentForm: (str: string) => void) => {
 	const spotifyUserContext = useContext(SpotifyUserContext);
 	return (
 		<div className="inputandsigninmethods 
